@@ -3,8 +3,8 @@
 
 The Standard Cross Reference is a simple tool that provides a centralized container for:
 
-    Data elements that have a finite number of valid values, which need to be validated before being written to an application database.
-    Descriptions, codes or numeric values associated with those data elements, which need to be looked up by an application program.
+  * Data elements that have a finite number of valid values, which need to be validated before being written to an application database.
+  * Descriptions, codes or numeric values associated with those data elements, which need to be looked up by an application program.
 
 Many companies have adopted a “table file” or “code file” over the years as a means to consolidate random pieces of information or groups of related pieces. However many of these files contained multiple record layouts which often meant hard coding Input specs into RPG. And since the “table file” still had to be read by RPG, a significant amount of non-productive code was required by application programs in order to use it…such as File specs, key lists, chain operations and no-hit handling.
 
@@ -16,11 +16,11 @@ Theoretically, you could provide an individual data base file/table for each typ
 
 Using STDXREF instead provides these advantages:
 
-    Single point of maintenance (program STDXREFMNT).
-    Single point of retrieval (STDXREFIOP functions).
-    Single point of high availability replication (table STDXREF).
-    Add to an application program with a single /COPY statement.
-    Option for multiple instances of STDXREF on the same system.
+  * Single point of maintenance (program STDXREFMNT).
+  * Single point of retrieval (STDXREFIOP functions).
+  * Single point of high availability replication (table STDXREF).
+  * Add to an application program with a single /COPY statement.
+  * Option for multiple instances of STDXREF on the same system.
 
 Now that STDXREF is on GitHub, we encourage you to download and deploy it for your internal applications. Being open source, it is still a work in progress. Please consider submitting suggestions for its improvement or even contributing your technical expertise to help us improve the functionality.
 
