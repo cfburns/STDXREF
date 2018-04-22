@@ -1,0 +1,127 @@
+     A**************************************************************************
+     A*
+     A*  STANDARD CROSS REFERENCE I/O PROCEDURES
+     A*
+     A*  Copyright (C) 2006, 2018  Christopher F. Burns Sr.
+     A*    c/o The Inuendo Project (http://inuendo.us).
+     A*
+     A*  This program is free software: you can redistribute it and/or modify
+     A*  it under the terms of the GNU General Public License as published by
+     A*  the Free Software Foundation, either version 3 of the License, or
+     A*  (at your option) any later version.
+     A*
+     A*  This program is distributed in the hope that it will be useful,
+     A*  but WITHOUT ANY WARRANTY; without even the implied warranty of
+     A*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+     A*  GNU General Public License for more details.
+     A*
+     A*  You should have received a copy of the GNU General Public License
+     A*  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+     A*
+     A**************************************************************************
+     A*
+     A                                      DSPSIZ(24 80 *DS3)
+     A*
+     A*  SEARCH FOR A CHARACTER ARGUMENT
+     A*
+     A          R FINDXREFS1                SFL
+     A            S1SELECT       1A  B  6  1COLOR(YLW)
+     A  41                                  DSPATR(UL)
+     A N41                                  DSPATR(PR)
+     A N41                                  DSPATR(ND)
+     A            S1REFTABLE    10   O  6  4
+     A            S1CHARARG     10   O  6 16
+     A            S1CHARRES     30A  O  6 28
+     A*
+     A          R FINDXREFC1                SFLCTL(FINDXREFS1)
+     A                                      CA12(12 'Cancel')
+     A                                      OVERLAY
+     A  31                                  SFLDSP
+     A  31                                  SFLDSPCTL
+     A N31                                  SFLCLR
+     A  31                                  SFLEND(*MORE)
+     A                                      SFLSIZ(0120)
+     A                                      SFLPAG(0008)
+     A                                      WINDOW(4 10 14 58 *NOMSGLIN)
+     A                                      WDWBORDER((*COLOR BLU) (*DSPATR RI)-
+     A                                       (*CHAR '        '))
+     A                                      USRRSTDSP
+     A                                  1  1'ENTER'
+     A                                      COLOR(BLU)
+     A                                  1 14'Standard Cross Reference Search'
+     A                                      DSPATR(RI)
+     A                                      COLOR(BLU)
+     A                                  1 48'F12=Cancel'
+     A                                      COLOR(BLU)
+     A                                  3  1'X'
+     A                                      DSPATR(UL)
+     A                                  3  4'Xref Table'
+     A                                      DSPATR(UL)
+     A                                  3 16'Argument  '
+     A                                      DSPATR(UL)
+     A                                  3 28'Description                   '
+     A                                      DSPATR(UL)
+     A            C1REFTABLE    10   O  4  4DSPATR(HI)
+     A            C1CHARARG     10   I  4 16COLOR(YLW)
+     A            C1CHARRES     30A  I  4 28COLOR(YLW)
+     A*
+     A          R FINDXREFD1
+     A                                      ASSUME
+     A                                 24 79' '
+     A*
+     A*  SEARCH FOR A NUMERIC ARGUMENT
+     A*
+     A          R FINDXREFS2                SFL
+     A            S2SELECT       1A  B  6  1COLOR(YLW)
+     A  41                                  DSPATR(UL)
+     A N41                                  DSPATR(PR)
+     A N41                                  DSPATR(ND)
+     A            S2REFTABLE    10   O  6  4
+     A            S2NUMARG      10Y 0O  6 16EDTCDE(3)
+     A N42                                  DSPATR(ND)
+     A            S2CHARRES     30A  O  6 28
+     A*
+     A          R FINDXREFC2                SFLCTL(FINDXREFS2)
+     A                                      CA12(12 'Cancel')
+     A                                      OVERLAY
+     A  31                                  SFLDSP
+     A  31                                  SFLDSPCTL
+     A N31                                  SFLCLR
+     A  31                                  SFLEND(*MORE)
+     A                                      SFLSIZ(0120)
+     A                                      SFLPAG(0008)
+     A                                      WINDOW(4 10 14 58 *NOMSGLIN)
+     A                                      WDWBORDER((*COLOR BLU) (*DSPATR RI)-
+     A                                       (*CHAR '        '))
+     A                                      USRRSTDSP
+     A                                  1  1'ENTER'
+     A                                      COLOR(BLU)
+     A                                  1 14'Standard Cross Reference Search'
+     A                                      DSPATR(RI)
+     A                                      COLOR(BLU)
+     A                                  1 48'F12=Cancel'
+     A                                      COLOR(BLU)
+     A                                  3  1'X'
+     A                                      DSPATR(UL)
+     A                                  3  4'Xref Table'
+     A                                      DSPATR(UL)
+     A                                  3 16'Argument  '
+     A                                      DSPATR(UL)
+     A                                  3 28'Description                   '
+     A                                      DSPATR(UL)
+     A            C2REFTABLE    10   O  4  4DSPATR(HI)
+     A            C2NUMARG      10Y 0I  4 16COLOR(YLW)
+     A            C2CHARRES     30A  I  4 28COLOR(YLW)
+     A*
+     A*  CONFIRM A DELETE OPERATION
+     A*
+     A          R OKTODELTW1
+     A*
+     A                                      OVERLAY
+     A                                      WINDOW(12 26 1 26 *NOMSGLIN)
+     A                                      WDWBORDER((*COLOR BLU) (*DSPATR RI)-
+     A                                       (*CHAR '        '))
+     A                                  1  1'OK To Delete ? (Y/N)'
+     A            W1OKFLAG       1   B  1 26COLOR(YLW)
+     A                                      VALUES('N' 'Y')
+     A*

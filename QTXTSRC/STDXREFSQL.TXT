@@ -1,0 +1,242 @@
+/******************************************************************************/
+/*                                                                            */
+/*  STANDARD CROSS REFERENCE - SQL FUNCTIONS                                  */
+/*                                                                            */
+/*  Copyright (C) 2006, 2018  Christopher F. Burns Sr.                        */
+/*                                                                            */
+/*  This program is free software: you can redistribute it and/or modify      */
+/*  it under the terms of the GNU General Public License as published by      */
+/*  the Free Software Foundation, either version 3 of the License, or         */
+/*  (at your option) any later version.                                       */
+/*                                                                            */
+/*  This program is distributed in the hope that it will be useful,           */
+/*  but WITHOUT ANY WARRANTY; without even the implied warranty of            */
+/*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the             */
+/*  GNU General Public License for more details.                              */
+/*                                                                            */
+/*  You should have received a copy of the GNU General Public License         */
+/*  along with this program.  If not, see <http://www.gnu.org/licenses/>.     */
+/*                                                                            */
+/******************************************************************************/
+
+
+CREATE FUNCTION VALIDXREF (
+  REFTABLE CHAR(10) ,
+  NUMARG INTEGER ,
+  CHARARG CHAR(15) )
+  RETURNS CHAR(1)
+  LANGUAGE RPGLE
+  SPECIFIC VALIDXREF
+  NOT DETERMINISTIC
+  MODIFIES SQL DATA
+  CALLED ON NULL INPUT
+  NOT FENCED
+  EXTERNAL NAME STDXREFIOP(VALIDXREF)
+  PARAMETER STYLE GENERAL ;
+
+COMMENT ON PARAMETER SPECIFIC FUNCTION VALIDXREF
+( REFTABLE IS 'Reference Table' ,
+  NUMARG IS 'Numeric Argument' ,
+  CHARARG IS 'Character Argument' ) ;
+
+LABEL ON SPECIFIC FUNCTION VALIDXREF
+  IS 'Valid Cross Reference Entry' ;
+
+
+CREATE FUNCTION VALIDXREF (
+  REFTABLE CHAR(10) ,
+  NUMARG INTEGER )
+  RETURNS CHAR(1)
+  LANGUAGE RPGLE
+  SPECIFIC VALIDXREFN
+  NOT DETERMINISTIC
+  MODIFIES SQL DATA
+  CALLED ON NULL INPUT
+  NOT FENCED
+  EXTERNAL NAME STDXREFIOP(VALIDXREFN)
+  PARAMETER STYLE GENERAL ;
+
+COMMENT ON PARAMETER SPECIFIC FUNCTION VALIDXREFN
+( REFTABLE IS 'Reference Table' ,
+  NUMARG IS 'Numeric Argument' ) ;
+
+LABEL ON SPECIFIC FUNCTION VALIDXREFN
+  IS 'Valid Cross Reference Entry' ;
+
+
+CREATE FUNCTION VALIDXREF (
+  REFTABLE CHAR(10) ,
+  CHARARG CHAR(15) )
+  RETURNS CHAR(1)
+  LANGUAGE RPGLE
+  SPECIFIC VALIDXREFC
+  NOT DETERMINISTIC
+  MODIFIES SQL DATA
+  CALLED ON NULL INPUT
+  NOT FENCED
+  EXTERNAL NAME STDXREFIOP(VALIDXREFC)
+  PARAMETER STYLE GENERAL ;
+
+COMMENT ON PARAMETER SPECIFIC FUNCTION VALIDXREFC
+( REFTABLE IS 'Reference Table' ,
+  CHARARG IS 'Character Argument' ) ;
+
+LABEL ON SPECIFIC FUNCTION VALIDXREFC
+  IS 'Valid Cross Reference Entry' ;
+
+
+CREATE FUNCTION XREFCHAR (
+  REFTABLE CHAR(10) ,
+  NUMARG INTEGER ,
+  CHARARG CHAR(15) )
+  RETURNS VARCHAR(50)
+  LANGUAGE RPGLE
+  SPECIFIC XREFCHAR
+  NOT DETERMINISTIC
+  MODIFIES SQL DATA
+  CALLED ON NULL INPUT
+  NOT FENCED
+  EXTERNAL NAME STDXREFIOP(XREFCHAR)
+  PARAMETER STYLE GENERAL ;
+
+COMMENT ON PARAMETER SPECIFIC FUNCTION XREFCHAR
+( REFTABLE IS 'Reference Table' ,
+  NUMARG IS 'Numeric Argument' ,
+  CHARARG IS 'Character Argument' ) ;
+
+LABEL ON SPECIFIC FUNCTION XREFCHAR
+  IS 'Get Cross Reference Character Result' ;
+
+
+CREATE FUNCTION XREFCHAR (
+  REFTABLE CHAR(10) ,
+  NUMARG INTEGER )
+  RETURNS VARCHAR(50)
+  LANGUAGE RPGLE
+  SPECIFIC XREFCHARN
+  NOT DETERMINISTIC
+  MODIFIES SQL DATA
+  CALLED ON NULL INPUT
+  NOT FENCED
+  EXTERNAL NAME STDXREFIOP(XREFCHARN)
+  PARAMETER STYLE GENERAL ;
+
+COMMENT ON PARAMETER SPECIFIC FUNCTION XREFCHARN
+( REFTABLE IS 'Reference Table' ,
+  NUMARG IS 'Numeric Argument' ) ;
+
+LABEL ON SPECIFIC FUNCTION XREFCHARN
+  IS 'Get Cross Reference Character Result' ;
+
+
+CREATE FUNCTION XREFCHAR (
+  REFTABLE CHAR(10) ,
+  CHARARG CHAR(15) )
+  RETURNS VARCHAR(50)
+  LANGUAGE RPGLE
+  SPECIFIC XREFCHARC
+  NOT DETERMINISTIC
+  MODIFIES SQL DATA
+  CALLED ON NULL INPUT
+  NOT FENCED
+  EXTERNAL NAME STDXREFIOP(XREFCHARC)
+  PARAMETER STYLE GENERAL ;
+
+COMMENT ON PARAMETER SPECIFIC FUNCTION XREFCHARC
+( REFTABLE IS 'Reference Table' ,
+  CHARARG IS 'Character Argument' ) ;
+
+LABEL ON SPECIFIC FUNCTION XREFCHARC
+  IS 'Get Cross Reference Character Result' ;
+
+
+CREATE FUNCTION XREFNUM (
+  REFTABLE CHAR(10) ,
+  NUMARG INTEGER ,
+  CHARARG CHAR(15) )
+  RETURNS DECIMAL(15, 5)
+  LANGUAGE RPGLE
+  SPECIFIC XREFNUM
+  NOT DETERMINISTIC
+  MODIFIES SQL DATA
+  CALLED ON NULL INPUT
+  NOT FENCED
+  EXTERNAL NAME STDXREFIOP(XREFNUM)
+  PARAMETER STYLE GENERAL ;
+
+COMMENT ON PARAMETER SPECIFIC FUNCTION XREFNUM
+( REFTABLE IS 'Reference Table' ,
+  NUMARG IS 'Numeric Argument' ,
+  CHARARG IS 'Character Argument' ) ;
+
+LABEL ON SPECIFIC FUNCTION XREFNUM
+  IS 'Get Cross Reference Numeric Result' ;
+
+
+CREATE FUNCTION XREFNUM (
+  REFTABLE CHAR(10) ,
+  NUMARG INTEGER )
+  RETURNS DECIMAL(15, 5)
+  LANGUAGE RPGLE
+  SPECIFIC XREFNUMN
+  NOT DETERMINISTIC
+  MODIFIES SQL DATA
+  CALLED ON NULL INPUT
+  NOT FENCED
+  EXTERNAL NAME STDXREFIOP(XREFNUMN)
+  PARAMETER STYLE GENERAL ;
+
+COMMENT ON PARAMETER SPECIFIC FUNCTION XREFNUMN
+( REFTABLE IS 'Reference Table' ,
+  NUMARG IS 'Numeric Argument' ) ;
+
+LABEL ON SPECIFIC FUNCTION XREFNUMN
+  IS 'Get Cross Reference Numeric Result' ;
+
+
+CREATE FUNCTION XREFNUM (
+  REFTABLE CHAR(10) ,
+  CHARARG CHAR(15) )
+  RETURNS DECIMAL(15, 5)
+  LANGUAGE RPGLE
+  SPECIFIC XREFNUMC
+  NOT DETERMINISTIC
+  MODIFIES SQL DATA
+  CALLED ON NULL INPUT
+  NOT FENCED
+  EXTERNAL NAME STDXREFIOP(XREFNUMC)
+  PARAMETER STYLE GENERAL ;
+
+COMMENT ON PARAMETER SPECIFIC FUNCTION XREFNUMC
+( REFTABLE IS 'Reference Table' ,
+  CHARARG IS 'Character Argument' ) ;
+
+LABEL ON SPECIFIC FUNCTION XREFNUMC
+  IS 'Get Cross Reference Numeric Result' ;
+
+
+CREATE FUNCTION INCRXREFNUM (
+  REFTABLE CHAR(10) ,
+  NUMARG INTEGER ,
+  CHARARG CHAR(15) ,
+  INCRVAL DECIMAL(15, 5) )
+  RETURNS DECIMAL(15, 5)
+  LANGUAGE RPGLE
+  SPECIFIC INCRXREFNUM
+  NOT DETERMINISTIC
+  MODIFIES SQL DATA
+  CALLED ON NULL INPUT
+  NOT FENCED
+  EXTERNAL NAME STDXREFIOP(INCRXREFNUM)
+  PARAMETER STYLE GENERAL ;
+
+COMMENT ON PARAMETER SPECIFIC FUNCTION INCRXREFNUM
+( REFTABLE IS 'Reference Table' ,
+  NUMARG IS 'Numeric Argument' ,
+  CHARARG IS 'Character Argument' ,
+  INCRVAL IS 'Increment Value' );
+
+LABEL ON SPECIFIC FUNCTION INCRXREFNUM
+  IS 'Increment Cross Reference Numeric Result' ;
+
+
