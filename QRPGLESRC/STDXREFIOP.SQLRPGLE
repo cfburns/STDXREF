@@ -447,7 +447,7 @@
 
       **********************************************************************************************
       *
-      *  Checks to see if a character argument is valid for a specified reference table.
+      *  Instantiates a new cross reference table if it does not exist already.
 
        dcl-proc putXrefTable export;                                         // put xref table hdr
 
@@ -473,7 +473,7 @@
 
       **********************************************************************************************
       *
-      *  Checks to see if a character argument is valid for a specified reference table.
+      *  Instantiates a new cross reference table entry if it does not exist already.
 
        dcl-proc putXrefEntry export;                                         // put xref table entry
 
@@ -504,6 +504,8 @@
        end-proc;                                                             // put xref table entry
 
       **********************************************************************************************
+      *
+      *  Determines whether a cross reference table uses a numeric argument.
 
        dcl-proc isNumericArg export;                                         // xref is numeric arg
 
@@ -521,6 +523,10 @@
        end-proc;                                                             // xref is numeric arg
 
       **********************************************************************************************
+      *
+      *  Retrieve a numeric result from a specified reference table, using both arguments,
+      *    after incrementing the result by the specified value.  The numeric result column
+      *    is updated in the matching entry.
 
        dcl-proc IncrXrefNum export;                                          // increment xref num
 
