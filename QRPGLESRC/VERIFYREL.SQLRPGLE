@@ -1,10 +1,8 @@
       **********************************************************************************************
       *                                                                                            *
-      *  STANDARD PROGRAM STATUS DATA STRUCTURE DEFINITION.                                        *
+      *  VERIFY OPERATING SYSTEM RELEASE                                                           *
       *                                                                                            *
-      *  Copyright (C) 2006, 2020  Christopher F. Burns Sr.                                        *
-      *                                                                                            *
-      *  Use RPG /COPY statement in application programs to include this member.                   *
+      *  Copyright (C) 2020  Christopher F. Burns Sr.                                              *
       *                                                                                            *
       *  This program is free software: you can redistribute it and/or modify                      *
       *  it under the terms of the GNU General Public License as published by                      *
@@ -21,12 +19,19 @@
       *                                                                                            *
       **********************************************************************************************
 
-       dcl-ds pgmsts psds qualified;                                         // program status d/s
-         pgmnam *proc;                                                       // program name
-         pgmlib char(10) pos(81);                                            // program library
-         jobnam char(10) pos(244);                                           // job name
-         usrprf char(10) pos(254);                                           // orig user profile
-         jobnum char(6)  pos(264);                                           // job number
-         curusr char(10) pos(358);                                           // curr user profile
-       end-ds;                                                               // program status d/s
+       ctl-opt dftactgrp(*no);
+
+       dcl-pi *n;
+         Release char(6);
+       end-pi;
+
+       clear Release;
+
+       exec sql
+         SELECT DISTINCT PTF_PRODUCT_RELEASE_LEVEL INTO :Release
+           FROM ptf_info
+             WHERE PTF_PRODUCT_ID LIKE '%999'
+               FETCH FIRST ROW ONLY;
+
+       *inlr = *on;
 

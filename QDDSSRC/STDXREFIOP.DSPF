@@ -2,8 +2,7 @@
      A*
      A*  STANDARD CROSS REFERENCE I/O PROCEDURES
      A*
-     A*  Copyright (C) 2006, 2018  Christopher F. Burns Sr.
-     A*    c/o The Inuendo Project (http://inuendo.us).
+     A*  Copyright (C) 2006, 2020  Christopher F. Burns Sr.
      A*
      A*  This program is free software: you can redistribute it and/or modify
      A*  it under the terms of the GNU General Public License as published by
@@ -124,4 +123,40 @@
      A                                  1  1'OK To Delete ? (Y/N)'
      A            W1OKFLAG       1   B  1 26COLOR(YLW)
      A                                      VALUES('N' 'Y')
+     A*
+     A*  SEARCH FOR AN ARGUMENT (ANY TYPE)
+     A*
+     A          R FINDXREFS3                SFL
+     A            S3SELECT       1A  B  6  1COLOR(YLW)
+     A  41                                  DSPATR(UL)
+     A N41                                  DSPATR(PR)
+     A N41                                  DSPATR(ND)
+     A            S3ARGUMENT    15A  O  6  4
+     A            S3RESULT      50A  O  6 21
+     A*
+     A          R FINDXREFC3                SFLCTL(FINDXREFS3)
+     A                                      CA12(12 'Cancel')
+     A                                      OVERLAY
+     A  31                                  SFLDSP
+     A  31                                  SFLDSPCTL
+     A N31                                  SFLCLR
+     A  31                                  SFLEND(*MORE)
+     A                                      SFLSIZ(0120)
+     A                                      SFLPAG(0008)
+     A                                      WINDOW(4 2 14 74 *NOMSGLIN)
+     A                                      WDWBORDER((*COLOR BLU) (*DSPATR RI)-
+     A                                       (*CHAR '        '))
+     A                                      USRRSTDSP
+     A            C3REFTABLE    15A  O  1  1DSPATR(HI)
+     A                                  1 22'Standard Cross Reference Search'
+     A                                      DSPATR(RI)
+     A                                      COLOR(BLU)
+     A                                  1 65'F12=Cancel'
+     A                                      COLOR(BLU)
+     A                                  3  1'X'
+     A                                      DSPATR(UL)
+     A            C3ARGTYPE     15   O  3  4DSPATR(UL)
+     A            C3RESTYPE     50   O  3 21DSPATR(UL)
+     A            C3ARGUMENT    15   I  4  4COLOR(YLW)
+     A            C3RESULT      50A  I  4 21COLOR(YLW)
      A*

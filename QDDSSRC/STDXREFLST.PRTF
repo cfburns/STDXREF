@@ -1,0 +1,105 @@
+     A**************************************************************************
+     A*
+     A*  STANDARD CROSS REFERENCE LISTING
+     A*
+     A*  Copyright (C) 2006, 2020  Christopher F. Burns Sr.
+     A*
+     A*  This program is free software: you can redistribute it and/or modify
+     A*  it under the terms of the GNU General Public License as published by
+     A*  the Free Software Foundation, either version 3 of the License, or
+     A*  (at your option) any later version.
+     A*
+     A*  This program is distributed in the hope that it will be useful,
+     A*  but WITHOUT ANY WARRANTY; without even the implied warranty of
+     A*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+     A*  GNU General Public License for more details.
+     A*
+     A*  You should have received a copy of the GNU General Public License
+     A*  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+     A*
+     A**************************************************************************
+     A*
+     A*  PAGE HEADER
+     A*
+     A          R HEADER
+     A                                      SKIPB(002)
+     A*
+     A                                     1
+     A                                      'User:'
+     A            P1USRPRF      10         9
+     A                                    30
+     A                                      'Standard X-Ref Listing'
+     A                                    64
+     A                                      'Date:'
+     A                                    71
+     A                                      DATE(*YY)
+     A                                      EDTCDE(Y)
+     A*
+     A                                     1
+     A                                      'Table:'
+     A                                      SPACEB(001)
+     A            P1REFTBL      15         9
+     A                                    64
+     A                                      'Time:'
+     A                                    73
+     A                                      TIME
+     A            P1TBLDES      50         9
+     A                                      SPACEB(001)
+     A                                    64
+     A                                      'Page:'
+     A                                    77
+     A                                      PAGNBR
+     A                                      EDTCDE(4)
+     A*
+     A                                     3
+     A                                      'Argument'
+     A                                      SPACEB(002)
+     A                                    22
+     A                                      'Type'
+     A                                    30
+     A                                      'Result '
+     A*
+     A                                     3
+     A                                      '---------------'
+     A                                      SPACEB(001)
+     A                                    22
+     A                                      '----'
+     A                                    30
+     A                                      '-----------------------------------
+     A                                      ----------------'
+     A*
+     A*  ENTRY DETAIL
+     A*
+     A          R DETAIL
+     A                                      SPACEB(001)
+     A*
+     A
+     A            P1NUMARGX     10   O     3
+     A                                    21
+     A                                      '<NUMR>'
+     A            P1NUMRESX     20   O    30
+     A*
+     A            P1CHARARG     15   O     3
+     A                                      SPACEB(001)
+     A                                    21
+     A                                      '<CHAR>'
+     A            P1CHARRES     50   O    30
+     A*
+     A            P1DATARGX     10   O     3
+     A                                      SPACEB(001)
+     A                                    21
+     A                                      '<DATE>'
+     A            P1DATRESX     10   O    30
+     A                                    71
+     A                                      'Hidden:'
+     A            P1HIDDEN       1   O    79
+     A*
+     A                                     3
+     A                                      '---------------'
+     A                                      SPACEB(001)
+     A                                    22
+     A                                      '----'
+     A                                    30
+     A                                      '-----------------------------------
+     A                                      ----------------'
+     A*

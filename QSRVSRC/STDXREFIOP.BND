@@ -2,8 +2,7 @@
 /*                                                                            */
 /*  STANDARD CROSS REFERENCE I/O PROCEDURES                                   */
 /*                                                                            */
-/*  Copyright (C) 2006, 2018  Christopher F. Burns Sr.                        */
-/*    c/o The Inuendo Project (http://inuendo.us).                            */
+/*  Copyright (C) 2006, 2020  Christopher F. Burns Sr.                        */
 /*                                                                            */
 /*  This program is free software: you can redistribute it and/or modify      */
 /*  it under the terms of the GNU General Public License as published by      */
@@ -21,20 +20,22 @@
 /******************************************************************************/
 
              STRPGMEXP  SIGNATURE('STDXREFIOP')
-             EXPORT     SYMBOL(XREFNUM)
-             EXPORT     SYMBOL(XREFNUMN)
-             EXPORT     SYMBOL(XREFNUMC)
-             EXPORT     SYMBOL(XREFCHAR)
-             EXPORT     SYMBOL(XREFCHARN)
-             EXPORT     SYMBOL(XREFCHARC)
              EXPORT     SYMBOL(FINDXREFNUM)
              EXPORT     SYMBOL(FINDXREFCHAR)
              EXPORT     SYMBOL(OKTODELETE)
              EXPORT     SYMBOL(VALIDXREF)
              EXPORT     SYMBOL(VALIDXREFN)
              EXPORT     SYMBOL(VALIDXREFC)
+             EXPORT     SYMBOL(VALIDXREFD)
+             EXPORT     SYMBOL(VALIDXREFNC)
+             EXPORT     SYMBOL(VALIDXREFND)
+             EXPORT     SYMBOL(VALIDXREFCD)
              EXPORT     SYMBOL(PUTXREFTABLE)
              EXPORT     SYMBOL(PUTXREFENTRY)
-             EXPORT     SYMBOL(INCRXREFNUM)
+             EXPORT     SYMBOL(FINDXREFARG)
+             EXPORT     SYMBOL(FINDXREFARGN)
+             EXPORT     SYMBOL(FINDXREFARGC)
+             EXPORT     SYMBOL(FINDXREFARGD)
+             EXPORT     SYMBOL(PRINTXREFTABLE)
              ENDPGMEXP
 

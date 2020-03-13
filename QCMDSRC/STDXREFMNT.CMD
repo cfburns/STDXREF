@@ -2,7 +2,7 @@
 /*                                                                            */
 /*  STANDARD CROSS REFERENCE MAINTENANCE                                      */
 /*                                                                            */
-/*  Copyright (C) 2006, 2018  Christopher F. Burns Sr.                        */
+/*  Copyright (C) 2006, 2020  Christopher F. Burns Sr.                        */
 /*                                                                            */
 /*  This program is free software: you can redistribute it and/or modify      */
 /*  it under the terms of the GNU General Public License as published by      */
@@ -21,7 +21,12 @@
 
              CMD        PROMPT('Standard X-Ref Maintenance')
 
-             PARM       KWD(REFTABLE) TYPE(*CHAR) LEN(10) MIN(1) +
+             PARM       KWD(REFTABLE) TYPE(*CHAR) LEN(15) DFT(*ALL) +
                           CHOICE('Name, *ALL') PROMPT('Reference +
                           table')
+
+             PARM       KWD(VERSION) TYPE(*CHAR) LEN(10) RSTD(*YES) +
+                          DFT(*CURRENT) VALUES(*CURRENT *LEGACY) +
+                          CHOICE('*CURRENT, *LEGACY') +
+                          PROMPT('Program Version')
 

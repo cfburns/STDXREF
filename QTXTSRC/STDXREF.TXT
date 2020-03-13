@@ -2,7 +2,7 @@
 /*                                                                            */
 /*  STANDARD CROSS REFERENCE - DATA OBJECTS (SQL)                             */
 /*                                                                            */
-/*  Copyright (C) 2006, 2018  Christopher F. Burns Sr.                        */
+/*  Copyright (C) 2006, 2020  Christopher F. Burns Sr.                        */
 /*                                                                            */
 /*  This program is free software: you can redistribute it and/or modify      */
 /*  it under the terms of the GNU General Public License as published by      */
@@ -21,11 +21,13 @@
 
 
 CREATE TABLE STDXREF (
-  REFTABLE CHAR(10) CCSID 37 NOT NULL ,
+  REFTABLE CHAR(15) CCSID 37 NOT NULL ,
   NUMARG INTEGER NOT NULL ,
   CHARARG CHAR(15) CCSID 37 NOT NULL ,
+  DATEARG DATE NOT NULL ,
   NUMRES DECIMAL(15, 5) NOT NULL ,
   CHARRES VARCHAR(50) CCSID 37 NOT NULL ,
+  DATERES DATE NOT NULL,
   HIDDEN CHAR(1) CCSID 37 NOT NULL ,
   ENTITYID INTEGER GENERATED ALWAYS AS IDENTITY (
   START WITH 1 INCREMENT BY 1
@@ -37,8 +39,11 @@ CREATE TABLE STDXREF (
   RCDFMT STDXREF    ;
 
 ALTER TABLE STDXREF
-  ADD CONSTRAINT Q_STDXREFSRC_STDXREF_ENTITYID_00001
-  UNIQUE( ENTITYID ) ;
+  ADD PRIMARY KEY (ENTITYID);
+
+ALTER TABLE STDXREF
+ ADD CONSTRAINT STDXREFSRC.Q_STDXREFSRC_STDXREF_REFTABLE_00001
+ UNIQUE( REFTABLE , NUMARG , CHARARG , DATEARG ) ;
 
 LABEL ON TABLE STDXREF
   IS 'Standard Cross Reference' ;
@@ -47,8 +52,10 @@ LABEL ON COLUMN STDXREF
 ( REFTABLE IS 'Reference           Table               Name' ,
   NUMARG IS 'Numeric             Argument' ,
   CHARARG IS 'Character           Argument' ,
+  DATEARG IS 'Date                Argument' ,
   NUMRES IS 'Numeric             Result' ,
   CHARRES IS 'Character           Result' ,
+  DATERES IS 'Date                Result' ,
   HIDDEN IS 'Hidden              From                Search' ,
   ENTITYID IS 'Unique              ID' ) ;
 
@@ -56,14 +63,16 @@ LABEL ON COLUMN STDXREF
 ( REFTABLE TEXT IS 'Reference Table Name' ,
   NUMARG TEXT IS 'Numeric Argument' ,
   CHARARG TEXT IS 'Character Argument' ,
+  DATEARG TEXT IS 'Date Argument' ,
   NUMRES TEXT IS 'Numeric Result' ,
   CHARRES TEXT IS 'Character Result' ,
+  DATERES TEXT IS 'Date Result' ,
   HIDDEN TEXT IS 'Hidden From Search' ,
   ENTITYID TEXT IS 'Unique ID' ) ;
 
 
-CREATE INDEX STDXREFL1
-  ON STDXREF ( REFTABLE ASC , NUMARG ASC , CHARARG ASC )
+CREATE UNIQUE INDEX STDXREFL1
+  ON STDXREF ( REFTABLE ASC , NUMARG ASC , CHARARG ASC, DATEARG ASC )
   ;
 
 LABEL ON INDEX STDXREFL1
@@ -71,7 +80,7 @@ LABEL ON INDEX STDXREFL1
 
 
 CREATE INDEX STDXREFL2
-  ON STDXREF ( REFTABLE ASC , CHARARG ASC , NUMARG ASC )
+  ON STDXREF ( REFTABLE ASC , CHARARG ASC , NUMARG ASC, DATEARG ASC )
   ;
 
 LABEL ON INDEX STDXREFL2
@@ -79,7 +88,7 @@ LABEL ON INDEX STDXREFL2
 
 
 CREATE INDEX STDXREFL3
-  ON STDXREF ( REFTABLE ASC , NUMRES ASC , CHARRES ASC )
+  ON STDXREF ( REFTABLE ASC , NUMRES ASC , CHARRES ASC, DATERES ASC )
   ;
 
 LABEL ON INDEX STDXREFL3
@@ -87,9 +96,26 @@ LABEL ON INDEX STDXREFL3
 
 
 CREATE INDEX STDXREFL4
-  ON STDXREF ( REFTABLE ASC , CHARRES ASC , NUMRES ASC )
+  ON STDXREF ( REFTABLE ASC , CHARRES ASC , NUMRES ASC, DATERES ASC )
   ;
 
 LABEL ON INDEX STDXREFL4
   IS 'Standard Cross Reference' ;
+
+
+CREATE INDEX STDXREFL5
+  ON STDXREF ( REFTABLE ASC , DATEARG ASC )
+  ;
+
+LABEL ON INDEX STDXREFL5
+  IS 'Standard Cross Reference' ;
+
+
+CREATE INDEX STDXREFL6
+  ON STDXREF ( REFTABLE ASC , DATERES ASC)
+  ;
+
+LABEL ON INDEX STDXREFL6
+  IS 'Standard Cross Reference' ;
+
 

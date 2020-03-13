@@ -1,0 +1,177 @@
+/******************************************************************************/
+/*                                                                            */
+/*  STANDARD CROSS REFERENCE - I/O FUNCTIONS                                  */
+/*                                                                            */
+/*  Copyright (C) 2006, 2020  Christopher F. Burns Sr.                        */
+/*                                                                            */
+/*  This program is free software: you can redistribute it and/or modify      */
+/*  it under the terms of the GNU General Public License as published by      */
+/*  the Free Software Foundation, either version 3 of the License, or         */
+/*  (at your option) any later version.                                       */
+/*                                                                            */
+/*  This program is distributed in the hope that it will be useful,           */
+/*  but WITHOUT ANY WARRANTY; without even the implied warranty of            */
+/*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the             */
+/*  GNU General Public License for more details.                              */
+/*                                                                            */
+/*  You should have received a copy of the GNU General Public License         */
+/*  along with this program.  If not, see <http://www.gnu.org/licenses/>.     */
+/*                                                                            */
+/******************************************************************************/
+
+
+CREATE OR REPLACE FUNCTION VALIDXREF (
+  REFTABLE CHAR(10) ,
+  NUMARG INTEGER ,
+  CHARARG CHAR(15) ,
+  DATEARG DATE )
+  RETURNS CHAR(1)
+  LANGUAGE RPGLE
+  SPECIFIC VALIDXREF
+  NOT DETERMINISTIC
+  MODIFIES SQL DATA
+  CALLED ON NULL INPUT
+  NOT FENCED
+  EXTERNAL NAME STDXREFIOP(VALIDXREF)
+  PARAMETER STYLE GENERAL ;
+
+COMMENT ON PARAMETER SPECIFIC FUNCTION VALIDXREF
+( REFTABLE IS 'Reference Table' ,
+  NUMARG IS 'Numeric Argument' ,
+  CHARARG IS 'Character Argument' ) ;
+
+LABEL ON SPECIFIC FUNCTION VALIDXREF
+  IS 'Valid Cross Reference Entry' ;
+
+
+CREATE OR REPLACE FUNCTION VALIDXREF (
+  REFTABLE CHAR(10) ,
+  NUMARG INTEGER )
+  RETURNS CHAR(1)
+  LANGUAGE RPGLE
+  SPECIFIC VALIDXREFN
+  NOT DETERMINISTIC
+  MODIFIES SQL DATA
+  CALLED ON NULL INPUT
+  NOT FENCED
+  EXTERNAL NAME STDXREFIOP(VALIDXREFN)
+  PARAMETER STYLE GENERAL ;
+
+COMMENT ON PARAMETER SPECIFIC FUNCTION VALIDXREFN
+( REFTABLE IS 'Reference Table' ,
+  NUMARG IS 'Numeric Argument' ) ;
+
+LABEL ON SPECIFIC FUNCTION VALIDXREFN
+  IS 'Valid Cross Reference Entry' ;
+
+
+CREATE OR REPLACE FUNCTION VALIDXREF (
+  REFTABLE CHAR(10) ,
+  CHARARG CHAR(15) )
+  RETURNS CHAR(1)
+  LANGUAGE RPGLE
+  SPECIFIC VALIDXREFC
+  NOT DETERMINISTIC
+  MODIFIES SQL DATA
+  CALLED ON NULL INPUT
+  NOT FENCED
+  EXTERNAL NAME STDXREFIOP(VALIDXREFC)
+  PARAMETER STYLE GENERAL ;
+
+COMMENT ON PARAMETER SPECIFIC FUNCTION VALIDXREFC
+( REFTABLE IS 'Reference Table' ,
+  CHARARG IS 'Character Argument' ) ;
+
+LABEL ON SPECIFIC FUNCTION VALIDXREFC
+  IS 'Valid Cross Reference Entry' ;
+
+
+CREATE OR REPLACE FUNCTION VALIDXREF (
+  REFTABLE CHAR(10) ,
+  DATEARG DATE )
+  RETURNS CHAR(1)
+  LANGUAGE RPGLE
+  SPECIFIC VALIDXREFD
+  NOT DETERMINISTIC
+  MODIFIES SQL DATA
+  CALLED ON NULL INPUT
+  NOT FENCED
+  EXTERNAL NAME STDXREFIOP(VALIDXREFD)
+  PARAMETER STYLE GENERAL ;
+
+COMMENT ON PARAMETER SPECIFIC FUNCTION VALIDXREFD
+( REFTABLE IS 'Reference Table' ,
+  DATEARG IS 'Date Argument' ) ;
+
+LABEL ON SPECIFIC FUNCTION VALIDXREFD
+  IS 'Valid Cross Reference Entry' ;
+
+
+CREATE OR REPLACE FUNCTION VALIDXREF (
+  REFTABLE CHAR(10) ,
+  NUMARG INTEGER ,
+  CHARARG CHAR(15) )
+  RETURNS CHAR(1)
+  LANGUAGE RPGLE
+  SPECIFIC VALIDXREFNC
+  NOT DETERMINISTIC
+  MODIFIES SQL DATA
+  CALLED ON NULL INPUT
+  NOT FENCED
+  EXTERNAL NAME STDXREFIOP(VALIDXREFNC)
+  PARAMETER STYLE GENERAL ;
+
+COMMENT ON PARAMETER SPECIFIC FUNCTION VALIDXREFNC
+( REFTABLE IS 'Reference Table' ,
+  NUMARG IS 'Numeric Argument' ,
+  CHARARG IS 'Character Argument' ) ;
+
+LABEL ON SPECIFIC FUNCTION VALIDXREFNC
+  IS 'Valid Cross Reference Entry' ;
+
+
+CREATE OR REPLACE FUNCTION VALIDXREF (
+  REFTABLE CHAR(10) ,
+  NUMARG INTEGER ,
+  DATEARG DATE )
+  RETURNS CHAR(1)
+  LANGUAGE RPGLE
+  SPECIFIC VALIDXREFND
+  NOT DETERMINISTIC
+  MODIFIES SQL DATA
+  CALLED ON NULL INPUT
+  NOT FENCED
+  EXTERNAL NAME STDXREFIOP(VALIDXREFND)
+  PARAMETER STYLE GENERAL ;
+
+COMMENT ON PARAMETER SPECIFIC FUNCTION VALIDXREFND
+( REFTABLE IS 'Reference Table' ,
+  NUMARG IS 'Numeric Argument' ,
+  DATEARG IS 'Date Argument' ) ;
+
+LABEL ON SPECIFIC FUNCTION VALIDXREFND
+  IS 'Valid Cross Reference Entry' ;
+
+
+CREATE OR REPLACE FUNCTION VALIDXREF (
+  REFTABLE CHAR(10) ,
+  CHARARG CHAR(15) ,
+  DATEARG DATE )
+  RETURNS CHAR(1)
+  LANGUAGE RPGLE
+  SPECIFIC VALIDXREFCD
+  NOT DETERMINISTIC
+  MODIFIES SQL DATA
+  CALLED ON NULL INPUT
+  NOT FENCED
+  EXTERNAL NAME STDXREFIOP(VALIDXREFCD)
+  PARAMETER STYLE GENERAL ;
+
+COMMENT ON PARAMETER SPECIFIC FUNCTION VALIDXREFCD
+( REFTABLE IS 'Reference Table' ,
+  CHARARG IS 'Character Argument' ,
+  DATEARG IS 'Date Argument' ) ;
+
+LABEL ON SPECIFIC FUNCTION VALIDXREFCD
+  IS 'Valid Cross Reference Entry' ;
+

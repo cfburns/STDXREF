@@ -2,7 +2,7 @@
 --
 --  STANDARD CROSS REFERENCE LISTING
 --
---  Copyright (C) 2006, 2018  Christopher F. Burns Sr.
+--  Copyright (C) 2006, 2020  Christopher F. Burns Sr.
 --
 --  This program is free software: you can redistribute it and/or modify
 --  it under the terms of the GNU General Public License as published by
@@ -22,8 +22,10 @@
 select reftable as reftable,
        '' as numarg,
        '' as chararg,
+       '' as datearg,
        '' as numres,
        charres as charres,
+       '' as dateres,
        '' as hidden
   from stdxref
     where (reftable = &REFTABLE or &REFTABLE = '*ALL')
@@ -32,14 +34,24 @@ select reftable as reftable,
 union
 
 select reftable,
-       char(numarg),
+       case when chararg = ' ' and datearg = date('0001-01-01')
+            then varchar_format(numarg,'9999999990')
+            else varchar_format(numarg,'9999999999') end,
        chararg,
-       char(numres),
+       case when datearg = date('0001-01-01')
+            then ' '
+            else char(datearg) end,
+       case when charres = ' ' and dateres = date('0001-01-01')
+            then varchar_format(numres, '9999999990.00000')
+            else varchar_format(numres, '9999999999.99999') end,
        charres,
+       case when dateres = date('0001-01-01')
+            then ' '
+            else char(dateres) end,
        hidden
   from stdxref
     where (reftable = &REFTABLE or &REFTABLE = '*ALL')
       and chararg <> 'REFTABLE'
 
-order by 1, 2, 3
+order by 1, 2, 3, 4
 

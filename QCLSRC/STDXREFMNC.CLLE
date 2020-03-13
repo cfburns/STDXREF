@@ -1,6 +1,6 @@
 /******************************************************************************/
 /*                                                                            */
-/*  STANDARD CROSS REFERENCE - INSTALLATION COMMAND                           */
+/*  STANDARD CROSS REFERENCE MAINTENANCE                                      */
 /*                                                                            */
 /*  Copyright (C) 2006, 2020  Christopher F. Burns Sr.                        */
 /*                                                                            */
@@ -19,11 +19,26 @@
 /*                                                                            */
 /******************************************************************************/
 
-             CMD        PROMPT('Install Standard X-Reference')
+             PGM        PARM(&REFTABLE &VERSION)
 
-             PARM       KWD(INSLIB) TYPE(*NAME) MIN(1) +
-                          PROMPT('Installation Library')
+             DCL        VAR(&REFTABLE) TYPE(*CHAR) LEN(15)
+             DCL        VAR(&VERSION)  TYPE(*CHAR) LEN(10)
 
-             PARM       KWD(USRPRF) TYPE(*NAME) MIN(1) PROMPT('Owner +
-                          User Profile')
+             IF         COND(&REFTABLE *EQ ' ') THEN(CHGVAR +
+                          VAR(&REFTABLE) VALUE('*ALL'))
+
+             IF         COND(&VERSION *EQ '*CURRENT') THEN(DO)
+
+                        CALL       PGM(STDXREFMN2) PARM(&REFTABLE)
+
+                        ENDDO
+
+             ELSE       CMD(DO)
+
+                        CALL       PGM(STDXREFMNT) PARM(&REFTABLE)
+
+                        ENDDO
+
+
+             ENDPGM
 

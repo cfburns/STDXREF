@@ -1,6 +1,6 @@
       **********************************************************************************************
       *                                                                                            *
-      *  STANDARD CROSS REFERENCE MAINTENANCE (LEGACY)                                             *
+      *  STANDARD CROSS REFERENCE MAINTENANCE (CURRENT)                                            *
       *                                                                                            *
       *  Copyright (C) 2006, 2020  Christopher F. Burns Sr.                                        *
       *                                                                                            *
@@ -23,7 +23,7 @@
       /copy qcpysrc,stdxrefiop                                               // std xref I/O procs
       /copy qcpysrc,stdpgmsts                                                // std prog status DS
 
-       dcl-f stdxrefmnt workstn sfile(stdxrefs1:sflrr1)
+       dcl-f stdxrefmn2 workstn sfile(stdxrefs1:sflrr1)
                                 sfile(stdxrefs2:sflrr2);                     // maintenance screens
 
        dcl-pr Listing extpgm('STDXREFC');                                    // hardcopy listing
@@ -46,10 +46,8 @@
          EnableDesc ind      pos(37);                                        // enable table desc
          EnableSFL2 ind      pos(41);                                        // enable SFL #2
          EnableOpt2 ind      pos(44);                                        // enable SFL #2 opts
-         ShowNumArg ind      pos(45);                                        // show numeric arg
          EnableArgs ind      pos(46);                                        // enable arguments
          EnableRslt ind      pos(47);                                        // enable results
-         ShowNumRes ind      pos(48);                                        // show numeric result
          TableLevel char(10) pos(60);                                        // table level attrib
          TableExist ind      pos(67);                                        // table already exists
          NamDesReqd ind      pos(69);                                        // name & desc required
@@ -74,11 +72,12 @@
                  order by 1;                                                 // table headers sql
 
        exec sql declare stdxrefx2 cursor for
-         select numarg, chararg, numres, charres, hidden, entityid
+         select numarg, chararg, datearg,
+                numres, charres, dateres, hidden,  entityid
            from stdxref
              where reftable = :c2RefTbl
                and chararg <> :Marker
-                 order by 1, 2;                                              // table entries sql
+                 order by 1, 2, 3;                                           // table entries sql
 
        // if a reference table name was passed, go directly to entries
 
@@ -114,6 +113,10 @@
            if Ind.Create;                                                    // if create table
              EditTables();                                                   // edit table header
              RevwTables();                                                   // review table
+           elseif Ind.Print;                                                 // or print all tables
+             w3RefTbl = '*ALL';                                              // ref table name
+             PrintXrefTable(w3RefTbl);                                       // print all tables
+             exfmt stdxrefw3;                                                // confirmation window
            elseif not Ind.Exit;                                              // or update table
              RevwTables();                                                   // review table
            endif;                                                            // if create table
@@ -170,18 +173,18 @@
 
        clear sflrr1;                                                         // sfl record number
 
-       dou %eof(stdxrefmnt);                                                 // until end of sfl
+       dou %eof(stdxrefmn2);                                                 // until end of sfl
 
          readc stdxrefs1;                                                    // read next entry
 
-         if %eof(stdxrefmnt);                                                // if end of subfile
+         if %eof(stdxrefmn2);                                                // if end of subfile
 
            // do nothing
 
          elseif s1Option = 'P';                                              // or print table
 
            w3RefTbl = s1RefTbl;                                              // ref table name
-           Listing(w3RefTbl);                                                // print listing
+           PrintXrefTable(w3RefTbl);                                         // print listing
            exfmt stdxrefw3;                                                  // confirmation window
 
          elseif s1Option = 'T';                                              // or edit table header
@@ -211,7 +214,6 @@
        dcl-proc EditTables;                                                  // edit table headers
 
        dcl-s TableCount int(5);                                              // table entry count
-       dcl-s LowDate    date;                                                // low date value
 
        clear stdxrefw1;                                                      // clear all fields
        clear errors;                                                         // clear error flag
@@ -248,7 +250,6 @@
 
            exec sql select count(*) into :TableCount from stdxref
              where reftable = :w1RefTbl
-               and numarg   = 0
                and chararg  = :Marker;                                       // see if exists
 
            Ind.NamDesReqd = (w1RefTbl = *blanks or w1TblDes = *blanks);      // name and dsc missing
@@ -264,25 +265,7 @@
                      and numarg   = 0
                      and chararg  = :Marker;                                 // see if exists
              else;                                                           // does not exist
-               exec sql
-                 insert into stdxref
-                   (reftable,
-                    numarg,
-                    chararg,
-                    datearg,
-                    numres,
-                    charres,
-                    dateres,
-                    hidden)
-                 values
-                   (:w1RefTbl,
-                    0,
-                    :Marker,
-                    :LowDate,
-                    0,
-                    :w1TblDes,
-                    :LowDate,
-                    ' ');                                                    // insert new header
+               putXrefTable(w1RefTbl : w1TblDes);                            // insert new header
              endif;                                                          // if exists
 
            endif;                                                            // if no errors
@@ -299,32 +282,78 @@
 
        clear Ind.EnableSFL2;                                                 // sfl non display
        clear Ind.EnableOpt2;                                                 // disable sfl option
-       clear Ind.ShowNumArg;                                                 // hide numeric arg
-       clear Ind.ShowNumRes;                                                 // hide numeric result
        clear sflrr2;                                                         // sfl record number
        clear stdxrefs2;                                                      // clear all fields
        write stdxrefc2;                                                      // clear subfile
 
        Ind.EnableSFL2 = *on;                                                 // sfl display mode
-       c2RefTbl = s1RefTbl;                                                  // reference table
-       c2TblDes = s1TblDes;                                                  // table description
-       c2PgmNam = pgmsts.pgmnam;                                             // program name
-       c2UsrPrf = pgmsts.usrprf;                                             // user profile
+       c2RefTbl  = s1RefTbl;                                                 // reference table
+       c2TblDes  = s1TblDes;                                                 // table description
+       c2PgmNam  = pgmsts.pgmnam;                                            // program name
+       c2UsrPrf  = pgmsts.usrprf;                                            // user profile
+       c2RcdCurs = 1;                                                        // sfl cursor position
 
        exec sql open stdxrefx2;                                              // open sql cursor
        exec sql fetch from stdxrefx2
-         into :s2NumArg,  :s2CharArg, :s2NumRes,
-              :s2CharRes, :s2Hidden,  :s2EntityID;                           // fetch first entry
+         into :s2NumArg, :s2CharArg, :s2DateArg,
+              :s2NumRes, :s2CharRes, :s2DateRes,
+              :s2Hidden, :s2EntityID;                                        // fetch first entry
 
        dow sqlcod = 0;                                                       // while more entries
+
          sflrr2 += 1;                                                        // sfl record number
+
+         if s2DateArg > *loval;                                              // if date argument
+           s2DatArgX = %char(s2DateArg:*iso);                                // show actual date
+         else;                                                               // no date argument
+           s2DatArgX = *blanks;                                              // show blanks instead
+         endif;                                                              // if date argument
+
+         if s2DateRes > *loval;                                              // if date result
+           s2DatResX = %char(s2DateRes:*iso);                                // show actual date
+         else;                                                               // no date result
+           s2DatResX = *blanks;                                              // show blanks instead
+         endif;                                                              // if date result
+
+         if s2CharArg = *blanks and s2DatArgX = *blanks;                     // if numeric arg only
+           s2NumArgX = %trim(%editc(s2NumArg:'3'));                          // align numeric arg
+         else;                                                               // other arguments
+           s2NumArgX = %trim(%editc(s2NumArg:'4'));                          // align numeric arg
+         endif;                                                              // if numeric arg only
+
+         if s2CharRes = *blanks and s2DatResX = *blanks;                     // if numeric res only
+           s2NumResX = %trim(%editc(s2NumRes:'1'));                          // align numeric res
+         else;                                                               // other results
+           s2NumResX = %trim(%editc(s2NumRes:'2'));                          // align numeric res
+         endif;                                                              // if numeric res only
+
          Ind.EnableOpt2 = *on;                                               // enable sfl option
-         Ind.ShowNumArg = (s2NumArg <> 0 or s2CharArg = *blanks);            // show/hide num arg
-         Ind.ShowNumRes = (s2NumRes <> 0 or s2CharRes = *blanks);            // show/hide num res
+
+         if c2ArgPosn > *blanks and c2RcdCurs = 1;                           // if argument posn to
+
+           if s2NumArgX > *blanks and s2NumArgX >= c2ArgPosn
+           or s2CharArg > *blanks and s2CharArg >= c2ArgPosn
+           or s2DatArgX > *blanks and s2DatArgX >= c2ArgPosn;                // if matching argument
+             c2RcdCurs = sflrr2;                                             // set cursor position
+           endif;                                                            // if matching argument
+
+         elseif c2ResPosn > *blanks and c2RcdCurs = 1;                       // or result posn to
+
+           if s2NumResX > *blanks and s2NumResX >= c2ResPosn
+           or s2CharRes > *blanks and s2CharRes >= c2ResPosn
+           or s2DatResX > *blanks and s2DatResX >= c2ResPosn;                // if matching result
+             c2RcdCurs = sflrr2;                                             // set cursor position
+           endif;                                                            // if matching result
+
+         endif;                                                              // if argument posn to
+
          write stdxrefs2;                                                    // write subfile recd
+
          exec sql fetch from stdxrefx2
-           into :s2NumArg,  :s2CharArg, :s2NumRes,
-                :s2CharRes, :s2Hidden,  :s2EntityID;                         // fetch next entry
+           into :s2NumArg, :s2CharArg, :s2DateArg,
+                :s2NumRes, :s2CharRes, :s2DateRes,
+                :s2Hidden, :s2EntityID;                                      // fetch first entry
+
        enddo;                                                                // while more entries
 
        exec sql close stdxrefx2;                                             // close sql cursor
@@ -347,7 +376,7 @@
        if Ind.Print;                                                         // if print
 
          w3RefTbl = c2RefTbl;                                                // ref table name
-         Listing(w3RefTbl);                                                  // print listing
+         PrintXrefTable(w3RefTbl);                                           // print listing
          exfmt stdxrefw3;                                                    // confirmation window
 
        elseif Ind.DeleteX and OKToDelete();                                  // or delete table
@@ -361,11 +390,11 @@
 
          clear sflrr2;                                                       // sfl record number
 
-         dou %eof(stdxrefmnt);                                               // until end of sfl
+         dou %eof(stdxrefmn2);                                               // until end of sfl
 
            readc stdxrefs2;                                                  // read next entry
 
-           if s2Option > *blanks and not %eof(stdxrefmnt);                   // if entry selected
+           if s2Option > *blanks and not %eof(stdxrefmn2);                   // if entry selected
              EditEntries();                                                  // edit selected entry
            endif;                                                            // if entry selected
 
@@ -379,7 +408,6 @@
        dcl-proc EditEntries;                                                 // edit table entries
 
        dcl-s EntryCount int(5);                                              // table entry count
-       dcl-s LowDate    date;                                                // low date value
 
        clear stdxrefw2;                                                      // clear all fields
        clear errors;
@@ -393,8 +421,10 @@
          Ind.EnableRslt = *on;                                               // enable results
          w2NumArg   = s2NumArg;                                              // numeric argument
          w2CharArg  = s2CharArg;                                             // character argument
+         w2DateArg  = s2DateArg;                                             // character argument
          w2NumRes   = s2NumRes;                                              // numeric result
          w2CharRes  = s2CharRes;                                             // character result
+         w2DateRes  = s2DateRes;                                             // character result
          w2Hidden   = s2Hidden;                                              // hidden from search
          w2EntityID = s2EntityID;                                            // entity ID
        endif;                                                                // if creating entry
@@ -421,6 +451,7 @@
              where reftable = :c2RefTbl
                and numarg   = :w2NumArg
                and chararg  = :w2CharArg
+               and datearg  = :w2DateArg
                and chararg <> :Marker;                                       // see if entry exists
 
            Ind.EntryExist = (Ind.EnableArgs and EntryCount > 0);             // entry already exists
@@ -433,28 +464,17 @@
                exec sql update stdxref
                  set numres  = :w2NumRes,
                      charres = trim(:w2CharRes),
+                     dateres = :w2DateRes,
                      hidden  = :w2Hidden
                    where entityID = :w2EntityID;                             // update this entry
              else;                                                           // adding new entry
-               exec sql
-                 insert into stdxref
-                   (reftable,
-                    numarg,
-                    chararg,
-                    datearg,
-                    numres,
-                    charres,
-                    dateres,
-                    hidden)
-                 values
-                   (trim(:c2RefTbl),
-                    :w2NumArg,
-                    trim(:w2CharArg),
-                    :LowDate,
-                    :w2NumRes,
-                    trim(:w2CharRes),
-                    :LowDate,
-                    :w2Hidden);                                              // insert new entry
+               exec sql insert into stdxref
+                 (reftable, numarg, chararg, datearg,
+                            numres, charres, dateres, hidden)
+                   values(trim(:c2RefTbl),
+                          :w2NumArg, trim(:w2CharArg), :w2DateArg,
+                          :w2NumRes, trim(:w2CharRes), :w2DateRes,
+                          :w2Hidden);                                        // insert new entry
              endif;                                                          // if updating entry
 
            endif;                                                            // if no errors

@@ -1,6 +1,6 @@
 /******************************************************************************/
 /*                                                                            */
-/*  STANDARD CROSS REFERENCE - INSTALLATION COMMAND                           */
+/*  STANDARD CROSS REFERENCE I/O PROCEDURES                                   */
 /*                                                                            */
 /*  Copyright (C) 2006, 2020  Christopher F. Burns Sr.                        */
 /*                                                                            */
@@ -19,11 +19,38 @@
 /*                                                                            */
 /******************************************************************************/
 
-             CMD        PROMPT('Install Standard X-Reference')
-
-             PARM       KWD(INSLIB) TYPE(*NAME) MIN(1) +
-                          PROMPT('Installation Library')
-
-             PARM       KWD(USRPRF) TYPE(*NAME) MIN(1) PROMPT('Owner +
-                          User Profile')
+             STRPGMEXP  SIGNATURE('STDXREFFNC')
+             EXPORT     SYMBOL(XREFNUM)
+             EXPORT     SYMBOL(XREFNUMN)
+             EXPORT     SYMBOL(XREFNUMC)
+             EXPORT     SYMBOL(XREFNUMD)
+             EXPORT     SYMBOL(XREFNUMNC)
+             EXPORT     SYMBOL(XREFNUMND)
+             EXPORT     SYMBOL(XREFNUMCD)
+             EXPORT     SYMBOL(XREFCHAR)
+             EXPORT     SYMBOL(XREFCHARN)
+             EXPORT     SYMBOL(XREFCHARC)
+             EXPORT     SYMBOL(XREFCHARD)
+             EXPORT     SYMBOL(XREFCHARNC)
+             EXPORT     SYMBOL(XREFCHARND)
+             EXPORT     SYMBOL(XREFCHARCD)
+             EXPORT     SYMBOL(XREFDATE)
+             EXPORT     SYMBOL(XREFDATEN)
+             EXPORT     SYMBOL(XREFDATEC)
+             EXPORT     SYMBOL(XREFDATED)
+             EXPORT     SYMBOL(XREFDATENC)
+             EXPORT     SYMBOL(XREFDATEND)
+             EXPORT     SYMBOL(XREFDATECD)
+             EXPORT     SYMBOL(INCRXREFNUM)
+             EXPORT     SYMBOL(INCRXREFDATE)
+             EXPORT     SYMBOL(XREFNSTEPN)
+             EXPORT     SYMBOL(XREFCSTEPN)
+             EXPORT     SYMBOL(XREFDSTEPN)
+             EXPORT     SYMBOL(XREFNSTEPC)
+             EXPORT     SYMBOL(XREFCSTEPC)
+             EXPORT     SYMBOL(XREFDSTEPC)
+             EXPORT     SYMBOL(XREFNSTEPD)
+             EXPORT     SYMBOL(XREFCSTEPD)
+             EXPORT     SYMBOL(XREFDSTEPD)
+             ENDPGMEXP
 

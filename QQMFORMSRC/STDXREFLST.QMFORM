@@ -1,12 +1,14 @@
-H QM4 05 F 01 E V W E R 01 03 18/04/15 10:24
+H QM4 05 F 01 E V W E R 01 03 20/02/06 16:09
 V 1001 050 Standard Cross Reference Listing
-T 1110 006 005 1114 007 1115 006 1116 005 1118 003 1113 062
-R BREAK1  2      10    1   Reference_Table_Name
-R         2      11    2   Numeric_Argument
-R         2      15    3   Character_Argument
-R         2      17    4   Numeric_Result
-R         2      50    5   Character_Result
-R         2      6     6   Hidden_From_Search
+T 1110 008 004 1115 006 1116 005 1118 003 1113 062
+R 2      15    1   Reference_Table_Name
+R 2      10    2   Numeric_Argument
+R 2      15    3   Character_Argument
+R 2      10    4   Date_Argument
+R 2      20    5   Numeric_Result
+R 2      50    6   Character_Result
+R 2      10    7   Date_Result
+R 2      6     8   Hidden_From_Search
 V 1201 001 0
 V 1202 001 2
 T 1210 002 003 1212 004 1213 006 1214 055

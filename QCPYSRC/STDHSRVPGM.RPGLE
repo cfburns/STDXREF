@@ -2,7 +2,7 @@
       *                                                                                            *
       *  STANDARD CONTROL SPEC FOR SERVICE PROGRAMS                                                *
       *                                                                                            *
-      *  Copyright (C) 2006, 2018  Christopher F. Burns Sr.                                        *
+      *  Copyright (C) 2006, 2020  Christopher F. Burns Sr.                                        *
       *                                                                                            *
       *  Use RPG /COPY statement in application programs to include this member.                   *
       *                                                                                            *

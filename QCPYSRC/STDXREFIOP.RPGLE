@@ -2,7 +2,7 @@
       *                                                                                            *
       *  STANDARD CROSS REFERENCE I/O PROCEDURES                                                   *
       *                                                                                            *
-      *  Copyright (C) 2006, 2018  Christopher F. Burns Sr.                                        *
+      *  Copyright (C) 2006, 2020  Christopher F. Burns Sr.                                        *
       *                                                                                            *
       *  This program is free software: you can redistribute it and/or modify                      *
       *  it under the terms of the GNU General Public License as published by                      *
@@ -19,48 +19,16 @@
       *                                                                                            *
       **********************************************************************************************
 
-       dcl-ds StdXref extname('STDXREF') qualified template end-ds;          // for definition only
+       dcl-ds StdXrefI extname('STDXREF') qualified template end-ds;         // for definition only
 
-       dcl-pr XrefNum like(stdxref.numres);                                  // xref with num result
-         RefTable like(stdxref.reftable) const;                              // reference table name
-         NumArg   like(stdxref.numarg)   const;                              // numeric argument
-         CharArg  like(stdxref.chararg)  const;                              // character argument
-       end-pr;                                                               // xref with num result
-
-       dcl-pr XrefNumN like(StdXref.numres);                                 // xref with num result
-         RefTable like(StdXref.reftable) const;                              // reference table name
-         NumArg   like(StdXref.numarg)   const;                              // numeric argument
-       end-pr;                                                               // xref with num result
-
-       dcl-pr XrefNumC like(StdXref.numres);                                 // xref with num result
-         RefTable like(StdXref.reftable) const;                              // reference table name
-         CharArg  like(StdXref.chararg)  const;                              // character argument
-       end-pr;                                                               // xref with num result
-
-       dcl-pr XrefChar like(stdxref.charres);                                // xref with chr result
-         RefTable like(stdxref.reftable) const;                              // reference table name
-         NumArg   like(stdxref.numarg)   const;                              // numeric argument
-         CharArg  like(stdxref.chararg)  const;                              // character argument
-       end-pr;                                                               // xref with chr result
-
-       dcl-pr XrefCharN like(StdXref.charres);                               // xref with chr result
-         RefTable like(StdXref.reftable) const;                              // reference table name
-         NumArg   like(StdXref.numarg)   const;                              // numeric argument
-       end-pr;                                                               // xref with chr result
-
-       dcl-pr XrefCharC like(StdXref.charres);                               // xref with chr result
-         RefTable like(StdXref.reftable) const;                              // reference table name
-         CharArg  like(StdXref.chararg)  const;                              // character argument
-       end-pr;                                                               // xref with chr result
-
-       dcl-pr FindXrefNum like(stdxref.numarg);                              // find xref num arg
-         RefTable like(stdxref.reftable) const;                              // reference table
-         PrvValue like(stdxref.numarg)   const options(*nopass);             // previous value
+       dcl-pr FindXrefNum like(StdXrefI.numarg);                             // find xref num arg
+         RefTable like(StdXrefI.reftable) const;                             // reference table
+         PrvValue like(StdXrefI.numarg)   const options(*nopass);            // previous value
        end-pr;                                                               // find xref num arg
 
-       dcl-pr FindXrefChar like(stdxref.chararg);                            // find xref char arg
-         RefTable like(stdxref.reftable) const;                              // reference table
-         PrvValue like(stdxref.chararg)  const options(*nopass);             // previous value
+       dcl-pr FindXrefChar like(StdXrefI.chararg);                           // find xref char arg
+         RefTable like(StdXrefI.reftable) const;                             // reference table
+         PrvValue like(StdXrefI.chararg)  const options(*nopass);            // previous value
        end-pr;                                                               // find xref char arg
 
        dcl-pr OKToDelete ind;                                                // OK to delete
@@ -68,41 +36,88 @@
        end-pr;                                                               // OK to delete
 
        dcl-pr ValidXref ind;                                                 // valid xref entry
-         RefTable like(stdxref.reftable) const;                              // reference table name
-         NumArg   like(stdxref.numarg)   const;                              // numeric argument
-         CharArg  like(stdxref.chararg)  const;                              // character argument
+         RefTable like(StdXrefI.reftable) const;                             // reference table
+         NumArg   like(StdXrefI.numarg)   const;                             // numeric argument
+         CharArg  like(StdXrefI.chararg)  const;                             // character argument
+         DateArg  like(StdXrefI.datearg)  const;                             // date argument
        end-pr;                                                               // valid xref entry
 
        dcl-pr ValidXrefN ind;                                                // valid xref entry
-         RefTable like(StdXref.reftable) const;                              // reference table name
-         NumArg   like(StdXref.numarg)   const;                              // numeric argument
+         RefTable like(StdXrefI.reftable) const;                             // reference table
+         NumArg   like(StdXrefI.numarg)   const;                             // numeric argument
        end-pr;                                                               // valid xref entry
 
        dcl-pr ValidXrefC ind;                                                // valid xref entry
-         RefTable like(StdXref.reftable) const;                              // reference table name
-         CharArg  like(StdXref.chararg)  const;                              // character argument
+         RefTable like(StdXrefI.reftable) const;                             // reference table
+         CharArg  like(StdXrefI.chararg)  const;                             // character argument
+       end-pr;                                                               // valid xref entry
+
+       dcl-pr ValidXrefD ind;                                                // valid xref entry
+         RefTable like(StdXrefI.reftable) const;                             // reference table
+         DateArg  like(StdXrefI.datearg)  const;                             // date argument
+       end-pr;                                                               // valid xref entry
+
+       dcl-pr ValidXrefNC ind;                                               // valid xref entry
+         RefTable like(StdXrefI.reftable) const;                             // reference table
+         NumArg   like(StdXrefI.numarg)   const;                             // numeric argument
+         CharArg  like(StdXrefI.chararg)  const;                             // character argument
+       end-pr;                                                               // valid xref entry
+
+       dcl-pr ValidXrefND ind;                                               // valid xref entry
+         RefTable like(StdXrefI.reftable) const;                             // reference table
+         NumArg   like(StdXrefI.numarg)   const;                             // numeric argument
+         DateArg  like(StdXrefI.datearg)  const;                             // date argument
+       end-pr;                                                               // valid xref entry
+
+       dcl-pr ValidXrefCD ind;                                               // valid xref entry
+         RefTable like(StdXrefI.reftable) const;                             // reference table
+         CharArg  like(StdXrefI.chararg)  const;                             // character argument
+         DateArg  like(StdXrefI.datearg)  const;                             // date argument
        end-pr;                                                               // valid xref entry
 
        dcl-pr putXrefTable ind;                                              // put xref table hdr
-         RefTable    like(StdXref.reftable) const;                           // reference table name
-         Description like(StdXref.charres)  const;                           // table description
+         RefTable    like(StdXrefI.reftable) const;                          // reference table
+         Description like(StdXrefI.charres)  const;                          // table description
        end-pr;                                                               // put xref table hdr
 
        dcl-pr putXrefEntry ind;                                              // put xref table entry
-         RefTable like(StdXref.reftable) const;                              // reference table name
-         NumArg   like(StdXref.numarg)   const;                              // numeric argument
-         CharArg  like(StdXref.chararg)  const;                              // character argument
-         NumRes   like(StdXref.numres)   const;                              // numeric result
-         CharRes  like(StdXref.charres)  const;                              // character result
-         Hidden   like(StdXref.hidden)   const;                              // hidden from search
+         RefTable like(StdXrefI.reftable) const;                             // reference table
+         NumArg   like(StdXrefI.numarg)   const;                             // numeric argument
+         CharArg  like(StdXrefI.chararg)  const;                             // character argument
+         DateArg  like(StdXrefI.datearg)  const;                             // date argument
+         NumRes   like(StdXrefI.numres)   const;                             // numeric result
+         CharRes  like(StdXrefI.charres)  const;                             // character result
+         DateRes  like(StdXrefI.dateres)  const;                             // date result
+         Hidden   like(StdXrefI.hidden)   const;                             // hidden from search
        end-pr;                                                               // put xref table entry
 
-       dcl-pr IncrXrefNum like(StdXref.numres);                              // increment xref num
-         RefTable like(StdXref.reftable) const;                              // reference table name
-         NumArg   like(StdXref.numarg)   const;                              // numeric argument
-         CharArg  like(StdXref.chararg)  const;                              // character argument
-         IncrVal  like(StdXref.numres)   const;                              // increment value
-       end-pr;                                                               // increment xref num
+       dcl-pr FindXrefArg like(StdXrefI.chararg);                            // find xref argument
+         RefTable like(StdXrefI.reftable) const;                             // reference table
+         ArgType  like(StdXrefI.hidden)   const;                             // argument type
+         ResType  like(StdXrefI.hidden)   const;                             // result type shown
+       end-pr;                                                               // find xref argument
 
-       dcl-s Marker like(StdXref.CharArg) inz('REFTABLE');                   // table header marker
+       dcl-pr FindXrefArgN like(StdXrefI.numarg);                            // find xref num arg
+         RefTable like(StdXrefI.reftable) const;                             // reference table
+         PrvValue like(StdXrefI.numarg)   const options(*nopass);            // previous value
+         ResType  like(StdXrefI.hidden)   const options(*nopass);            // result type shown
+       end-pr;                                                               // find xref num arg
+
+       dcl-pr FindXrefArgC like(StdXrefI.chararg);                           // find xref char arg
+         RefTable like(StdXrefI.reftable) const;                             // reference table
+         PrvValue like(StdXrefI.chararg)  const options(*nopass);            // previous value
+         ResType  like(StdXrefI.hidden)   const options(*nopass);            // result type shown
+       end-pr;                                                               // find xref char arg
+
+       dcl-pr FindXrefArgD like(StdXrefI.datearg);                           // find xref date arg
+         RefTable like(StdXrefI.reftable) const;                             // reference table
+         PrvValue like(StdXrefI.datearg)  const options(*nopass);            // previous value
+         ResType  like(StdXrefI.hidden)   const options(*nopass);            // result type shown
+       end-pr;                                                               // find xref date arg
+
+       dcl-pr PrintXrefTable;                                                // print xref table
+         RefTable like(StdXrefI.RefTable) value options(*nopass);            // reference table
+       end-pr;                                                               // print xref table
+
+       dcl-s Marker like(StdXrefI.CharArg) inz('REFTABLE');                  // table header marker
 
