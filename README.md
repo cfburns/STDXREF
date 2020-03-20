@@ -17,12 +17,12 @@ Theoretically, you could provide an individual data base file/table for each typ
 
 Using STDXREF instead provides these advantages:
 
-  * Single point of maintenance (program STDXREFMNT).
+  * Single point of maintenance.
   * Single point of retrieval (STDXREFIOP functions).
   * Single point of high availability replication (table STDXREF).
-  * Add to an application program with a single /COPY statement.
+  * Add to an application program with a single /COPY statement or SQL SET statement.
   * Option for multiple instances of STDXREF on the same system.
 
 Now that STDXREF is on GitHub, we encourage you to download and deploy it for your internal applications. Being open source, it is still a work in progress. Please consider submitting suggestions for its improvement or even contributing your technical expertise to help us improve the functionality.
 
-Note that STDXREF is simplistic and does not contain any audit trail capabilities. An alternate version of STDXREF for Inuendo databases is under construction and will take full advantage of Inuendo’s self-journaling and audit trail features. This will appear on GitHub when it is released.
+Note that STDXREF uses Temporal Table versioning if your OS release supports it.  An alternate version of STDXREF for Inuendo databases is under construction and will take full advantage of Inuendo’s self-journaling and audit trail features. This will appear on GitHub when it is released.
