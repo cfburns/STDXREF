@@ -2,7 +2,7 @@
       *                                                                                            *
       *  STANDARD CROSS REFERENCE APPLICATION FUNCTIONS                                            *
       *                                                                                            *
-      *  Copyright (C) 2006, 2020  Christopher F. Burns Sr.                                        *
+      *  Copyright (C) 2006, 2021  Christopher F. Burns Sr.                                        *
       *                                                                                            *
       *  This program is free software: you can redistribute it and/or modify                      *
       *  it under the terms of the GNU General Public License as published by                      *
@@ -21,184 +21,184 @@
 
        dcl-ds StdXrefF extname('STDXREF') qualified template end-ds;         // for definition only
 
-       dcl-pr XrefNum like(StdXrefF.numres);                                 // xref with num result
-         RefTable like(StdXrefF.reftable) const;                              // reference table
-         NumArg   like(StdXrefF.numarg)   const;                              // numeric argument
-         CharArg  like(StdXrefF.chararg)  const;                              // character argument
-         DateArg  like(StdXrefF.datearg)  const;                              // date argument
+       dcl-pr XrefNum like(StdXrefF.NumRes);                                 // xref with num result
+         RefTable like(StdXrefF.RefTable) const;                             // reference table
+         NumArg   like(StdXrefF.NumArg)   const;                             // numeric argument
+         CharArg  like(StdXrefF.CharArg)  const;                             // character argument
+         DateArg  like(StdXrefF.DateArg)  const;                             // date argument
        end-pr;                                                               // xref with num result
 
-       dcl-pr XrefNumN like(StdXrefF.numres);                                // xref with num result
-         RefTable like(StdXrefF.reftable) const;                              // reference table
-         NumArg   like(StdXrefF.numarg)   const;                              // numeric argument
+       dcl-pr XrefNumN like(StdXrefF.NumRes);                                // xref with num result
+         RefTable like(StdXrefF.RefTable) const;                             // reference table
+         NumArg   like(StdXrefF.NumArg)   const;                             // numeric argument
        end-pr;                                                               // xref with num result
 
-       dcl-pr XrefNumC like(StdXrefF.numres);                                // xref with num result
-         RefTable like(StdXrefF.reftable) const;                              // reference table
-         CharArg  like(StdXrefF.chararg)  const;                              // character argument
+       dcl-pr XrefNumC like(StdXrefF.NumRes);                                // xref with num result
+         RefTable like(StdXrefF.RefTable) const;                             // reference table
+         CharArg  like(StdXrefF.CharArg)  const;                             // character argument
        end-pr;                                                               // xref with num result
 
-       dcl-pr XrefNumD like(StdXrefF.numres);                                // xref with num result
-         RefTable like(StdXrefF.reftable) const;                              // reference table
-         DateArg  like(StdXrefF.datearg)  const;                              // date argument
+       dcl-pr XrefNumD like(StdXrefF.NumRes);                                // xref with num result
+         RefTable like(StdXrefF.RefTable) const;                             // reference table
+         DateArg  like(StdXrefF.DateArg)  const;                             // date argument
        end-pr;                                                               // xref with num result
 
-       dcl-pr XrefNumNC like(StdXrefF.numres);                               // xref with num result
-         RefTable like(StdXrefF.reftable) const;                              // reference table
-         NumArg   like(StdXrefF.numarg)   const;                              // numeric argument
-         CharArg  like(StdXrefF.chararg)  const;                              // character argument
+       dcl-pr XrefNumNC like(StdXrefF.NumRes);                               // xref with num result
+         RefTable like(StdXrefF.RefTable) const;                             // reference table
+         NumArg   like(StdXrefF.NumArg)   const;                             // numeric argument
+         CharArg  like(StdXrefF.CharArg)  const;                             // character argument
        end-pr;                                                               // xref with num result
 
-       dcl-pr XrefNumND like(StdXrefF.numres);                               // xref with num result
-         RefTable like(StdXrefF.reftable) const;                              // reference table
-         NumArg   like(StdXrefF.numarg)   const;                              // numeric argument
-         DateArg  like(StdXrefF.datearg)  const;                              // date argument
+       dcl-pr XrefNumND like(StdXrefF.NumRes);                               // xref with num result
+         RefTable like(StdXrefF.RefTable) const;                             // reference table
+         NumArg   like(StdXrefF.NumArg)   const;                             // numeric argument
+         DateArg  like(StdXrefF.DateArg)  const;                             // date argument
        end-pr;                                                               // xref with num result
 
-       dcl-pr XrefNumCD like(StdXrefF.numres);                               // xref with num result
-         RefTable like(StdXrefF.reftable) const;                              // reference table
-         CharArg  like(StdXrefF.chararg)  const;                              // character argument
-         DateArg  like(StdXrefF.datearg)  const;                              // date argument
+       dcl-pr XrefNumCD like(StdXrefF.NumRes);                               // xref with num result
+         RefTable like(StdXrefF.RefTable) const;                             // reference table
+         CharArg  like(StdXrefF.CharArg)  const;                             // character argument
+         DateArg  like(StdXrefF.DateArg)  const;                             // date argument
        end-pr;                                                               // xref with num result
 
-       dcl-pr XrefChar like(StdXrefF.charres);                               // xref with chr result
-         RefTable like(StdXrefF.reftable) const;                              // reference table
-         NumArg   like(StdXrefF.numarg)   const;                              // numeric argument
-         CharArg  like(StdXrefF.chararg)  const;                              // character argument
-         DateArg  like(StdXrefF.datearg)  const;                              // date argument
+       dcl-pr XrefChar like(StdXrefF.CharRes);                               // xref with chr result
+         RefTable like(StdXrefF.RefTable) const;                             // reference table
+         NumArg   like(StdXrefF.NumArg)   const;                             // numeric argument
+         CharArg  like(StdXrefF.CharArg)  const;                             // character argument
+         DateArg  like(StdXrefF.DateArg)  const;                             // date argument
        end-pr;                                                               // xref with chr result
 
-       dcl-pr XrefCharN like(StdXrefF.charres);                              // xref with chr result
-         RefTable like(StdXrefF.reftable) const;                              // reference table
-         NumArg   like(StdXrefF.numarg)   const;                              // numeric argument
+       dcl-pr XrefCharN like(StdXrefF.CharRes);                              // xref with chr result
+         RefTable like(StdXrefF.RefTable) const;                             // reference table
+         NumArg   like(StdXrefF.NumArg)   const;                             // numeric argument
        end-pr;                                                               // xref with chr result
 
-       dcl-pr XrefCharC like(StdXrefF.charres);                              // xref with chr result
-         RefTable like(StdXrefF.reftable) const;                              // reference table
-         CharArg  like(StdXrefF.chararg)  const;                              // character argument
+       dcl-pr XrefCharC like(StdXrefF.CharRes);                              // xref with chr result
+         RefTable like(StdXrefF.RefTable) const;                             // reference table
+         CharArg  like(StdXrefF.CharArg)  const;                             // character argument
        end-pr;                                                               // xref with chr result
 
-       dcl-pr XrefCharD like(StdXrefF.charres);                              // xref with chr result
-         RefTable like(StdXrefF.reftable) const;                              // reference table
-         DateArg  like(StdXrefF.datearg)  const;                              // date argument
+       dcl-pr XrefCharD like(StdXrefF.CharRes);                              // xref with chr result
+         RefTable like(StdXrefF.RefTable) const;                             // reference table
+         DateArg  like(StdXrefF.DateArg)  const;                             // date argument
        end-pr;                                                               // xref with chr result
 
-       dcl-pr XrefCharNC like(StdXrefF.charres);                             // xref with chr result
-         RefTable like(StdXrefF.reftable) const;                              // reference table
-         NumArg   like(StdXrefF.numarg)   const;                              // numeric argument
-         CharArg  like(StdXrefF.chararg)  const;                              // character argument
+       dcl-pr XrefCharNC like(StdXrefF.CharRes);                             // xref with chr result
+         RefTable like(StdXrefF.RefTable) const;                             // reference table
+         NumArg   like(StdXrefF.NumArg)   const;                             // numeric argument
+         CharArg  like(StdXrefF.CharArg)  const;                             // character argument
        end-pr;                                                               // xref with chr result
 
-       dcl-pr XrefCharND like(StdXrefF.charres);                             // xref with chr result
-         RefTable like(StdXrefF.reftable) const;                              // reference table
-         NumArg   like(StdXrefF.numarg)   const;                              // numeric argument
-         DateArg  like(StdXrefF.datearg)  const;                              // date argument
+       dcl-pr XrefCharND like(StdXrefF.CharRes);                             // xref with chr result
+         RefTable like(StdXrefF.RefTable) const;                             // reference table
+         NumArg   like(StdXrefF.NumArg)   const;                             // numeric argument
+         DateArg  like(StdXrefF.DateArg)  const;                             // date argument
        end-pr;                                                               // xref with chr result
 
-       dcl-pr XrefCharCD like(StdXrefF.charres);                             // xref with chr result
-         RefTable like(StdXrefF.reftable) const;                              // reference table
-         CharArg  like(StdXrefF.chararg)  const;                              // character argument
-         DateArg  like(StdXrefF.datearg)  const;                              // date argument
+       dcl-pr XrefCharCD like(StdXrefF.CharRes);                             // xref with chr result
+         RefTable like(StdXrefF.RefTable) const;                             // reference table
+         CharArg  like(StdXrefF.CharArg)  const;                             // character argument
+         DateArg  like(StdXrefF.DateArg)  const;                             // date argument
        end-pr;                                                               // xref with chr result
 
-       dcl-pr XrefDate like(StdXrefF.dateres);                               // xref with dat result
-         RefTable like(StdXrefF.reftable) const;                              // reference table
-         NumArg   like(StdXrefF.numarg)   const;                              // numeric argument
-         CharArg  like(StdXrefF.chararg)  const;                              // character argument
-         DateArg  like(StdXrefF.datearg)  const;                              // date argument
+       dcl-pr XrefDate like(StdXrefF.DateRes);                               // xref with dat result
+         RefTable like(StdXrefF.RefTable) const;                             // reference table
+         NumArg   like(StdXrefF.NumArg)   const;                             // numeric argument
+         CharArg  like(StdXrefF.CharArg)  const;                             // character argument
+         DateArg  like(StdXrefF.DateArg)  const;                             // date argument
        end-pr;                                                               // xref with dat result
 
-       dcl-pr XrefDateN like(StdXrefF.dateres);                              // xref with dat result
-         RefTable like(StdXrefF.reftable) const;                              // reference table
-         NumArg   like(StdXrefF.numarg)   const;                              // numeric argument
+       dcl-pr XrefDateN like(StdXrefF.DateRes);                              // xref with dat result
+         RefTable like(StdXrefF.RefTable) const;                             // reference table
+         NumArg   like(StdXrefF.NumArg)   const;                             // numeric argument
        end-pr;                                                               // xref with dat result
 
-       dcl-pr XrefDateC like(StdXrefF.dateres);                              // xref with dat result
-         RefTable like(StdXrefF.reftable) const;                              // reference table
-         CharArg  like(StdXrefF.chararg)  const;                              // character argument
+       dcl-pr XrefDateC like(StdXrefF.DateRes);                              // xref with dat result
+         RefTable like(StdXrefF.RefTable) const;                             // reference table
+         CharArg  like(StdXrefF.CharArg)  const;                             // character argument
        end-pr;                                                               // xref with dat result
 
-       dcl-pr XrefDateD like(StdXrefF.dateres);                              // xref with dat result
-         RefTable like(StdXrefF.reftable) const;                              // reference table
-         DateArg  like(StdXrefF.datearg)  const;                              // date argument
+       dcl-pr XrefDateD like(StdXrefF.DateRes);                              // xref with dat result
+         RefTable like(StdXrefF.RefTable) const;                             // reference table
+         DateArg  like(StdXrefF.DateArg)  const;                             // date argument
        end-pr;                                                               // xref with dat result
 
-       dcl-pr XrefDateNC like(StdXrefF.dateres);                             // xref with dat result
-         RefTable like(StdXrefF.reftable) const;                              // reference table
-         NumArg   like(StdXrefF.numarg)   const;                              // numeric argument
-         CharArg  like(StdXrefF.chararg)  const;                              // character argument
+       dcl-pr XrefDateNC like(StdXrefF.DateRes);                             // xref with dat result
+         RefTable like(StdXrefF.RefTable) const;                             // reference table
+         NumArg   like(StdXrefF.NumArg)   const;                             // numeric argument
+         CharArg  like(StdXrefF.CharArg)  const;                             // character argument
        end-pr;                                                               // xref with dat result
 
-       dcl-pr XrefDateND like(StdXrefF.dateres);                             // xref with dat result
-         RefTable like(StdXrefF.reftable) const;                              // reference table
-         NumArg   like(StdXrefF.numarg)   const;                              // numeric argument
-         DateArg  like(StdXrefF.datearg)  const;                              // date argument
+       dcl-pr XrefDateND like(StdXrefF.DateRes);                             // xref with dat result
+         RefTable like(StdXrefF.RefTable) const;                             // reference table
+         NumArg   like(StdXrefF.NumArg)   const;                             // numeric argument
+         DateArg  like(StdXrefF.DateArg)  const;                             // date argument
        end-pr;                                                               // xref with dat result
 
-       dcl-pr XrefDateCD like(StdXrefF.dateres);                             // xref with dat result
-         RefTable like(StdXrefF.reftable) const;                              // reference table
-         CharArg  like(StdXrefF.chararg)  const;                              // character argument
-         DateArg  like(StdXrefF.datearg)  const;                              // date argument
+       dcl-pr XrefDateCD like(StdXrefF.DateRes);                             // xref with dat result
+         RefTable like(StdXrefF.RefTable) const;                             // reference table
+         CharArg  like(StdXrefF.CharArg)  const;                             // character argument
+         DateArg  like(StdXrefF.DateArg)  const;                             // date argument
        end-pr;                                                               // xref with dat result
 
-       dcl-pr IncrXrefNum like(StdXrefF.numres);                             // increment xref num
-         RefTable like(StdXrefF.reftable) const;                              // reference table
-         NumArg   like(StdXrefF.numarg)   const;                              // numeric argument
-         CharArg  like(StdXrefF.chararg)  const;                              // character argument
-         DateArg  like(StdXrefF.datearg)  const;                              // date argument
-         IncrVal  like(StdXrefF.numres)   const;                              // increment value
+       dcl-pr IncrXrefNum like(StdXrefF.NumRes);                             // increment xref num
+         RefTable like(StdXrefF.RefTable) const;                             // reference table
+         NumArg   like(StdXrefF.NumArg)   const;                             // numeric argument
+         CharArg  like(StdXrefF.CharArg)  const;                             // character argument
+         DateArg  like(StdXrefF.DateArg)  const;                             // date argument
+         IncrVal  like(StdXrefF.NumRes)   const;                             // increment value
        end-pr;                                                               // increment xref num
 
-       dcl-pr IncrXrefDate like(StdXrefF.dateres);                           // increment xref date
-         RefTable like(StdXrefF.reftable) const;                              // reference table
-         NumArg   like(StdXrefF.numarg)   const;                              // numeric argument
-         CharArg  like(StdXrefF.chararg)  const;                              // character argument
-         DateArg  like(StdXrefF.datearg)  const;                              // date argument
-         IncrDays like(StdXrefF.numarg)   const;                              // increment num days
+       dcl-pr IncrXrefDate like(StdXrefF.DateRes);                           // increment xref date
+         RefTable like(StdXrefF.RefTable) const;                             // reference table
+         NumArg   like(StdXrefF.NumArg)   const;                             // numeric argument
+         CharArg  like(StdXrefF.CharArg)  const;                             // character argument
+         DateArg  like(StdXrefF.DateArg)  const;                             // date argument
+         IncrDays like(StdXrefF.NumArg)   const;                             // increment num days
        end-pr;                                                               // increment xref date
 
-       dcl-pr XrefNStepN like(StdXrefF.numres);                              // step with num result
-         RefTable like(StdXrefF.reftable) const;                              // reference table
-         NumArg   like(StdXrefF.numarg)   const;                              // numeric argument
+       dcl-pr XrefNStepN like(StdXrefF.NumRes);                              // step with num result
+         RefTable like(StdXrefF.RefTable) const;                             // reference table
+         NumArg   like(StdXrefF.NumArg)   const;                             // numeric argument
        end-pr;                                                               // step with num result
 
-       dcl-pr XrefCStepN like(StdXrefF.charres);                             // step with chr result
-         RefTable like(StdXrefF.reftable) const;                              // reference table
-         NumArg   like(StdXrefF.numarg)   const;                              // numeric argument
+       dcl-pr XrefCStepN like(StdXrefF.CharRes);                             // step with chr result
+         RefTable like(StdXrefF.RefTable) const;                             // reference table
+         NumArg   like(StdXrefF.NumArg)   const;                             // numeric argument
        end-pr;                                                               // step with chr result
 
-       dcl-pr XrefDStepN like(StdXrefF.dateres);                             // step with dat result
-         RefTable like(StdXrefF.reftable) const;                              // reference table
-         NumArg   like(StdXrefF.numarg)   const;                              // numeric argument
+       dcl-pr XrefDStepN like(StdXrefF.DateRes);                             // step with dat result
+         RefTable like(StdXrefF.RefTable) const;                             // reference table
+         NumArg   like(StdXrefF.NumArg)   const;                             // numeric argument
        end-pr;                                                               // step with dat result
 
-       dcl-pr XrefNStepC like(StdXrefF.numres);                              // step with num result
-         RefTable like(StdXrefF.reftable) const;                              // reference table
-         CharArg  like(StdXrefF.chararg)  const;                              // character argument
+       dcl-pr XrefNStepC like(StdXrefF.NumRes);                              // step with num result
+         RefTable like(StdXrefF.RefTable) const;                             // reference table
+         CharArg  like(StdXrefF.CharArg)  const;                             // character argument
        end-pr;                                                               // step with num result
 
-       dcl-pr XrefCStepC like(StdXrefF.charres);                             // step with chr result
-         RefTable like(StdXrefF.reftable) const;                              // reference table
-         CharArg  like(StdXrefF.chararg)  const;                              // character argument
+       dcl-pr XrefCStepC like(StdXrefF.CharRes);                             // step with chr result
+         RefTable like(StdXrefF.RefTable) const;                             // reference table
+         CharArg  like(StdXrefF.CharArg)  const;                             // character argument
        end-pr;                                                               // step with chr result
 
-       dcl-pr XrefDStepC like(StdXrefF.dateres);                             // step with dat result
-         RefTable like(StdXrefF.reftable) const;                              // reference table
-         CharArg  like(StdXrefF.chararg)  const;                              // character argument
+       dcl-pr XrefDStepC like(StdXrefF.DateRes);                             // step with dat result
+         RefTable like(StdXrefF.RefTable) const;                             // reference table
+         CharArg  like(StdXrefF.CharArg)  const;                             // character argument
        end-pr;                                                               // step with dat result
 
-       dcl-pr XrefNStepD like(StdXrefF.numres);                              // step with num result
-         RefTable like(StdXrefF.reftable) const;                              // reference table
-         DateArg  like(StdXrefF.datearg)  const;                              // date argument
+       dcl-pr XrefNStepD like(StdXrefF.NumRes);                              // step with num result
+         RefTable like(StdXrefF.RefTable) const;                             // reference table
+         DateArg  like(StdXrefF.DateArg)  const;                             // date argument
        end-pr;                                                               // step with num result
 
-       dcl-pr XrefCStepD like(StdXrefF.charres);                             // step with chr result
-         RefTable like(StdXrefF.reftable) const;                              // reference table
-         DateArg  like(StdXrefF.datearg)  const;                              // date argument
+       dcl-pr XrefCStepD like(StdXrefF.CharRes);                             // step with chr result
+         RefTable like(StdXrefF.RefTable) const;                             // reference table
+         DateArg  like(StdXrefF.DateArg)  const;                             // date argument
        end-pr;                                                               // step with chr result
 
-       dcl-pr XrefDStepD like(StdXrefF.dateres);                             // step with dat result
-         RefTable like(StdXrefF.reftable) const;                              // reference table
-         DateArg  like(StdXrefF.datearg)  const;                              // date argument
+       dcl-pr XrefDStepD like(StdXrefF.DateRes);                             // step with dat result
+         RefTable like(StdXrefF.RefTable) const;                             // reference table
+         DateArg  like(StdXrefF.DateArg)  const;                             // date argument
        end-pr;                                                               // step with dat result
 

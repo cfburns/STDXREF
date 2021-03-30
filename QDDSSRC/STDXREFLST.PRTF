@@ -2,7 +2,7 @@
      A*
      A*  STANDARD CROSS REFERENCE LISTING
      A*
-     A*  Copyright (C) 2006, 2020  Christopher F. Burns Sr.
+     A*  Copyright (C) 2006, 2021  Christopher F. Burns Sr.
      A*
      A*  This program is free software: you can redistribute it and/or modify
      A*  it under the terms of the GNU General Public License as published by
@@ -68,25 +68,36 @@
      A                                      '-----------------------------------
      A                                      ----------------'
      A*
-     A*  ENTRY DETAIL
+     A*  ENTRY NUMERIC DETAIL
      A*
-     A          R DETAIL
+     A          R NUMBDETAIL
      A                                      SPACEB(001)
-     A*
      A
      A            P1NUMARGX     10   O     3
      A                                    21
      A                                      '<NUMR>'
      A            P1NUMRESX     20   O    30
      A*
-     A            P1CHARARG     15   O     3
+     A*  ENTRY CHARACTER DETAIL
+     A*
+     A          R CHARDETAIL
      A                                      SPACEB(001)
+     A            P1CHARARG     15   O     3
      A                                    21
      A                                      '<CHAR>'
      A            P1CHARRES     50   O    30
      A*
-     A            P1DATARGX     10   O     3
+     A*  ENTRY CHARACTER DETAIL OVERFLOW
+     A*
+     A          R CHAROVRFLW
      A                                      SPACEB(001)
+     A            P1CHARRES     50   O    30
+     A*
+     A*  ENTRY DATE DETAIL
+     A*
+     A          R DATEDETAIL
+     A                                      SPACEB(001)
+     A            P1DATARGX     10   O     3
      A                                    21
      A                                      '<DATE>'
      A            P1DATRESX     10   O    30
@@ -94,9 +105,12 @@
      A                                      'Hidden:'
      A            P1HIDDEN       1   O    79
      A*
+     A*  ENTRY SEPARATOR
+     A*
+     A          R SEPARATOR
+     A                                      SPACEB(001)
      A                                     3
      A                                      '---------------'
-     A                                      SPACEB(001)
      A                                    22
      A                                      '----'
      A                                    30

@@ -2,7 +2,7 @@
       *                                                                                            *
       *  STANDARD CROSS REFERENCE I/O PROCEDURES                                                   *
       *                                                                                            *
-      *  Copyright (C) 2006, 2020  Christopher F. Burns Sr.                                        *
+      *  Copyright (C) 2006, 2021  Christopher F. Burns Sr.                                        *
       *                                                                                            *
       *  This program is free software: you can redistribute it and/or modify                      *
       *  it under the terms of the GNU General Public License as published by                      *
@@ -54,31 +54,31 @@
 
        dcl-proc FindXrefNum export;                                          // find xref num arg
 
-       dcl-pi FindXrefNum like(StdXrefI.numarg);                             // find xref num arg
-         RefTable like(StdXrefI.reftable) const;                             // reference table
-         PrvValue like(StdXrefI.numarg)   const options(*nopass);            // previous value
+       dcl-pi FindXrefNum like(StdXrefI.NumArg);                             // find xref num arg
+         RefTable like(StdXrefI.RefTable) const;                             // reference table
+         PrvValue like(StdXrefI.NumArg)   const options(*nopass);            // previous value
        end-pi;                                                               // find xref num arg
 
-       dcl-s SelectedArg like(StdXrefI.numarg);                              // selected num arg
+       dcl-s SelectedArg like(StdXrefI.NumArg);                              // selected num arg
 
        open StdXrefIOP;                                                      // open display file
 
-       c2reftable = RefTable;                                                // reference table
+       c2RefTable = RefTable;                                                // reference table
 
        exec sql declare FindXrefNumX1 cursor for
-         select reftable, numarg, charres from StdXref
-           where  reftable = :RefTable
-             and  numarg  >= :c2numarg
-             and  chararg <> :Marker
-             and  hidden  <> 'Y'
+         select RefTable, NumArg, CharRes from StdXref
+           where  RefTable = :RefTable
+             and  NumArg  >= :c2NumArg
+             and  CharArg <> :Marker
+             and  Hidden  <> 'Y'
                order by 2;                                                   // ordering by arg
 
        exec sql declare FindXrefNumX2 cursor for
-         select reftable, numarg, charres from StdXref
-           where reftable  = :reftable
-             and charres  >= :c2charres
-             and chararg  <> :Marker
-             and  hidden  <> 'Y'
+         select RefTable, NumArg, CharRes from StdXref
+           where RefTable  = :RefTable
+             and CharRes  >= :c2CharRes
+             and CharArg  <> :Marker
+             and  Hidden  <> 'Y'
                order by 3;                                                   // ordering by desc
 
        dou Ind.Cancel or SelectedArg > 0;                                    // until canc or select
@@ -93,7 +93,7 @@
 
          Ind.EnableSFL = *on;                                                // enable subfile
 
-         if c2charres > *blanks;                                             // if search on result
+         if c2CharRes > *blanks;                                             // if search on result
            exec sql open findxrefnumx2;                                      // open its cursor
          else;                                                               // search on argument
            exec sql open findxrefnumx1;                                      // open its cursor
@@ -101,12 +101,12 @@
 
          dou sqlcod <> 0 or %eof(StdXrefIOP);                                // until no more rows
 
-           if c2charres > *blanks;                                           // if search on result
+           if c2CharRes > *blanks;                                           // if search on result
              exec sql fetch from findxrefnumx2
-               into :s2reftable, :s2numarg, :s2charres;                      // fetch table entry
+               into :s2RefTable, :s2NumArg, :s2CharRes;                      // fetch table entry
            else;                                                             // search on arg
              exec sql fetch from findxrefnumx1
-               into :s2reftable, :s2numarg, :s2charres;                      // fetch table entry
+               into :s2RefTable, :s2NumArg, :s2CharRes;                      // fetch table entry
            endif;                                                            // if search on result
 
            if sqlcod = *zeros;                                               // if successful fetch
@@ -118,14 +118,14 @@
 
          enddo;                                                              // until no more rows
 
-         if c2charres > *blanks;                                             // if search on result
+         if c2CharRes > *blanks;                                             // if search on result
            exec sql close findxrefnumx2;                                     // close its cursor
          else;                                                               // search on argument
            exec sql close findxrefnumx1;                                     // close its cursor
          endif;                                                              // if search on result
 
          if sflrr2 = *zeros;                                                 // if subfile empty
-           s2charres = 'NO ENTRIES FOUND';                                   // show relevant text
+           s2CharRes = 'NO ENTRIES FOUND';                                   // show relevant text
            sflrr2 = 2;                                                       // SFL record number
            write findxrefs2;                                                 // write SFL record
          endif;                                                              // if subfile empty
@@ -141,7 +141,7 @@
            enddo;                                                            // until end or select
 
            if s2select > *blanks;                                            // if entry selected
-             selectedArg = s2numarg;                                         // capture selection
+             selectedArg = s2NumArg;                                         // capture selection
            endif;                                                            // if entry selected
 
          endif;                                                              // if enter pressed
@@ -162,31 +162,31 @@
 
        dcl-proc FindXrefChar export;                                         // find xref char arg
 
-       dcl-pi FindXrefChar like(StdXrefI.chararg);                           // find xref char arg
-         RefTable like(StdXrefI.reftable) const;                             // reference table
-         PrvValue like(StdXrefI.chararg)  const options(*nopass);            // previous value
+       dcl-pi FindXrefChar like(StdXrefI.CharArg);                           // find xref char arg
+         RefTable like(StdXrefI.RefTable) const;                             // reference table
+         PrvValue like(StdXrefI.CharArg)  const options(*nopass);            // previous value
        end-pi;                                                               // find xref char arg
 
-       dcl-s SelectedArg like(StdXrefI.chararg);                             // selected char arg
+       dcl-s SelectedArg like(StdXrefI.CharArg);                             // selected char arg
 
        open StdXrefIOP;                                                      // open display file
 
-       c1reftable = reftable;                                                // reference table
+       c1RefTable = RefTable;                                                // reference table
 
        exec sql declare FindXrefCharX1 cursor for
-         select reftable, chararg, charres from StdXref
-           where  reftable  = :RefTable
-             and  chararg  >= :c1chararg
-             and  chararg  <> :Marker
-             and  hidden   <> 'Y'
+         select RefTable, CharArg, CharRes from StdXref
+           where  RefTable  = :RefTable
+             and  CharArg  >= :c1CharArg
+             and  CharArg  <> :Marker
+             and  Hidden   <> 'Y'
                order by 2;                                                   // ordering by arg
 
        exec sql declare findxrefcharx2 cursor for
-         select reftable, chararg, charres from StdXref
-           where  reftable  = :reftable
-             and  charres  >= :c1charres
-             and  chararg  <> :Marker
-             and  hidden   <> 'Y'
+         select RefTable, CharArg, CharRes from StdXref
+           where  RefTable  = :RefTable
+             and  CharRes  >= :c1CharRes
+             and  CharArg  <> :Marker
+             and  Hidden   <> 'Y'
                order by 3;                                                   // ordering by desc
 
        dou Ind.Cancel or SelectedArg > *blanks;                              // until canc or select
@@ -200,7 +200,7 @@
 
          Ind.EnableSFL = *on;                                                // enable subfile
 
-         if c1charres > *blanks;                                             // if search on result
+         if c1CharRes > *blanks;                                             // if search on result
            exec sql open findxrefcharx2;                                     // open its cursor
          else;                                                               // search on argument
            exec sql open findxrefcharx1;                                     // open its cursor
@@ -208,12 +208,12 @@
 
          dou sqlcod <> *zeros or %eof(StdXrefIOP);                           // until no more rows
 
-           if c1charres > *blanks;                                           // if search on result
+           if c1CharRes > *blanks;                                           // if search on result
              exec sql fetch from findxrefcharx2
-               into :s1reftable, :s1chararg, :s1charres;                     // fetch table entry
+               into :s1RefTable, :s1CharArg, :s1CharRes;                     // fetch table entry
            else;                                                             // search on arg
              exec sql fetch from findxrefcharx1
-               into :s1reftable, :s1chararg, :s1charres;                     // fetch table entry
+               into :s1RefTable, :s1CharArg, :s1CharRes;                     // fetch table entry
            endif;                                                            // if search on result
 
            if sqlcod = *zeros;                                               // if successful fetch
@@ -224,14 +224,14 @@
 
          enddo;                                                              // until no more rows
 
-         if c1charres > *blanks;                                             // if search on result
+         if c1CharRes > *blanks;                                             // if search on result
            exec sql close findxrefcharx2;                                    // close its cursor
          else;                                                               // search on argument
            exec sql close findxrefcharx1;                                    // close its cursor
          endif;                                                              // if search on result
 
          if sflrr1 = 0;                                                      // if subfile empty
-           s1charres = 'NO ENTRIES FOUND';                                   // show relevant text
+           s1CharRes = 'NO ENTRIES FOUND';                                   // show relevant text
            sflrr1 = 2;                                                       // SFL record number
            write findxrefs1;                                                 // write SFL record
          endif;                                                              // if subfile empty
@@ -247,7 +247,7 @@
            enddo;                                                            // until end or select
 
            if s1select > *blanks;                                            // if entry selected
-             selectedArg = s1chararg;                                        // capture selection
+             selectedArg = s1CharArg;                                        // capture selection
            endif;                                                            // if entry selected
 
          endif;                                                              // if enter pressed
@@ -297,20 +297,20 @@
        dcl-proc ValidXref export;                                            // valid xref entry
 
        dcl-pi ValidXref ind;                                                 // valid xref entry
-         RefTable like(StdXrefI.reftable) const;                             // reference table
-         NumArg   like(StdXrefI.numarg)   const;                             // numeric argument
-         CharArg  like(StdXrefI.chararg)  const;                             // character argument
-         DateArg  like(StdXrefI.datearg)  const;                             // date argument
+         RefTable like(StdXrefI.RefTable) const;                             // reference table
+         NumArg   like(StdXrefI.NumArg)   const;                             // numeric argument
+         CharArg  like(StdXrefI.CharArg)  const;                             // character argument
+         DateArg  like(StdXrefI.DateArg)  const;                             // date argument
        end-pi;                                                               // valid xref entry
 
        dcl-s ValidXrefX packed(1);                                           // valid xref found
 
        exec sql select 1 into :ValidXrefX from StdXref
-         where reftable = :RefTable
-           and numarg   = :NumArg
-           and chararg  = :CharArg
-           and datearg  = :DateArg
-           and chararg <> :Marker;
+         where RefTable = :RefTable
+           and NumArg   = :NumArg
+           and CharArg  = :CharArg
+           and DateArg  = :DateArg
+           and CharArg <> :Marker;
 
        return (ValidXrefX > 0);                                              // true if match found
 
@@ -323,11 +323,11 @@
        dcl-proc ValidXrefN export;                                           // valid xref entry
 
        dcl-pi ValidXrefN ind;                                                // valid xref entry
-         RefTable like(StdXrefI.reftable) const;                             // reference table
-         NumArg   like(StdXrefI.numarg)   const;                             // numeric argument
+         RefTable like(StdXrefI.RefTable) const;                             // reference table
+         NumArg   like(StdXrefI.NumArg)   const;                             // numeric argument
        end-pi;                                                               // valid xref entry
 
-       return ValidXref(RefTable : NumArg : *blanks : *loval);               // true if match found
+       return ValidXref(RefTable : NumArg : *blanks : LowDate);              // true if match found
 
        end-proc;                                                             // valid xref entry
 
@@ -338,11 +338,11 @@
        dcl-proc ValidXrefC export;                                           // valid xref entry
 
        dcl-pi ValidXrefC ind;                                                // valid xref entry
-         RefTable like(StdXrefI.reftable) const;                             // reference table
-         CharArg  like(StdXrefI.chararg)  const;                             // character argument
+         RefTable like(StdXrefI.RefTable) const;                             // reference table
+         CharArg  like(StdXrefI.CharArg)  const;                             // character argument
        end-pi;                                                               // valid xref entry
 
-       return ValidXref(RefTable : 0 : CharArg : *loval);                    // true if match found
+       return ValidXref(RefTable : 0 : CharArg : LowDate);                   // true if match found
 
        end-proc;                                                             // valid xref entry
 
@@ -353,8 +353,8 @@
        dcl-proc ValidXrefD export;                                           // valid xref entry
 
        dcl-pi ValidXrefD ind;                                                // valid xref entry
-         RefTable like(StdXrefI.reftable) const;                             // reference table
-         DateArg  like(StdXrefI.datearg)  const;                             // date argument
+         RefTable like(StdXrefI.RefTable) const;                             // reference table
+         DateArg  like(StdXrefI.DateArg)  const;                             // date argument
        end-pi;                                                               // valid xref entry
 
        return ValidXref(RefTable : 0 : *blanks : DateArg);                   // true if match found
@@ -369,12 +369,12 @@
        dcl-proc ValidXrefNC export;                                          // valid xref entry
 
        dcl-pi ValidXrefNC ind;                                               // valid xref entry
-         RefTable like(StdXrefI.reftable) const;                             // reference table
-         NumArg   like(StdXrefI.numarg)   const;                             // numeric argument
-         CharArg  like(StdXrefI.chararg)  const;                             // character argument
+         RefTable like(StdXrefI.RefTable) const;                             // reference table
+         NumArg   like(StdXrefI.NumArg)   const;                             // numeric argument
+         CharArg  like(StdXrefI.CharArg)  const;                             // character argument
        end-pi;                                                               // valid xref entry
 
-       return ValidXref(RefTable : NumArg : CharArg : *loval);               // true if match found
+       return ValidXref(RefTable : NumArg : CharArg : LowDate);              // true if match found
 
        end-proc;                                                             // valid xref entry
 
@@ -386,9 +386,9 @@
        dcl-proc ValidXrefND export;                                          // valid xref entry
 
        dcl-pi ValidXrefND ind;                                               // valid xref entry
-         RefTable like(StdXrefI.reftable) const;                             // reference table
-         NumArg   like(StdXrefI.numarg)   const;                             // numeric argument
-         DateArg  like(StdXrefI.datearg)  const;                             // date argument
+         RefTable like(StdXrefI.RefTable) const;                             // reference table
+         NumArg   like(StdXrefI.NumArg)   const;                             // numeric argument
+         DateArg  like(StdXrefI.DateArg)  const;                             // date argument
        end-pi;                                                               // valid xref entry
 
        return ValidXref(RefTable : NumArg : *blank : DateArg);               // true if match found
@@ -403,9 +403,9 @@
        dcl-proc ValidXrefCD export;                                          // valid xref entry
 
        dcl-pi ValidXrefCD ind;                                               // valid xref entry
-         RefTable like(StdXrefI.reftable) const;                             // reference table
-         CharArg  like(StdXrefI.chararg)  const;                             // character argument
-         DateArg  like(StdXrefI.datearg)  const;                             // date argument
+         RefTable like(StdXrefI.RefTable) const;                             // reference table
+         CharArg  like(StdXrefI.CharArg)  const;                             // character argument
+         DateArg  like(StdXrefI.DateArg)  const;                             // date argument
        end-pi;                                                               // valid xref entry
 
        return ValidXref(RefTable : 0 : CharArg : DateArg);                   // true if match found
@@ -419,21 +419,19 @@
        dcl-proc putXrefTable export;                                         // put xref table hdr
 
        dcl-pi putXrefTable ind;                                              // put xref table hdr
-         RefTable like(StdXrefI.reftable) const;                             // reference table
-         Descrip  like(StdXrefI.charres)  const;                             // table description
+         RefTable like(StdXrefI.RefTable) const;                             // reference table
+         Descrip  like(StdXrefI.CharRes)  const;                             // table description
        end-pi;                                                               // put xref table hdr
 
-       dcl-s LowDate date;                                                   // low date value
-
        exec sql update stdxref
-         set charres = :Descrip
-           where reftable = :RefTable
-             and chararg  = :Marker;                                         // update description
+         set CharRes = :Descrip
+           where RefTable = :RefTable
+             and CharArg  = :Marker;                                         // update description
 
        if sqlcod = 100;                                                      // if no match found
          exec sql
-           insert into stdxref (reftable,  numarg, chararg,  datearg,
-                                hidden,    numres, charres,  dateres)
+           insert into stdxref (RefTable,  NumArg, CharArg,  DateArg,
+                                Hidden,    NumRes, CharRes,  DateRes)
                          values(:RefTable, 0,      :Marker,  :LowDate,
                                 ' ',       0,      :Descrip, :LowDate);      // insert table header
        endif;                                                                // if no match found
@@ -449,27 +447,27 @@
        dcl-proc putXrefEntry export;                                         // put xref table entry
 
        dcl-pi putXrefEntry ind;                                              // put xref table entry
-         RefTable like(StdXrefI.reftable) const;                             // reference table
-         NumArg   like(StdXrefI.numarg)   const;                             // numeric argument
-         CharArg  like(StdXrefI.chararg)  const;                             // character argument
-         DateArg  like(StdXrefI.datearg)  const;                             // date argument
-         NumRes   like(StdXrefI.numres)   const;                             // numeric result
-         CharRes  like(StdXrefI.charres)  const;                             // character result
-         DateRes  like(StdXrefI.dateres)  const;                             // date result
-         Hidden   like(StdXrefI.hidden)   const;                             // hidden from search
+         RefTable like(StdXrefI.RefTable) const;                             // reference table
+         NumArg   like(StdXrefI.NumArg)   const;                             // numeric argument
+         CharArg  like(StdXrefI.CharArg)  const;                             // character argument
+         DateArg  like(StdXrefI.DateArg)  const;                             // date argument
+         NumRes   like(StdXrefI.NumRes)   const;                             // numeric result
+         CharRes  like(StdXrefI.CharRes)  const;                             // character result
+         DateRes  like(StdXrefI.DateRes)  const;                             // date result
+         Hidden   like(StdXrefI.Hidden)   const;                             // hidden from search
        end-pi;                                                               // put xref table entry
 
        exec sql update stdxref
-         set numres = :NumRes, charres = :CharRes,
-             hidden = :Hidden, dateres = :DateRes
-           where reftable = :RefTable
-             and numarg   = :NumArg
-             and chararg  = :CharArg;                                        // update table entry
+         set NumRes = :NumRes, CharRes = :CharRes,
+             Hidden = :Hidden, DateRes = :DateRes
+           where RefTable = :RefTable
+             and NumArg   = :NumArg
+             and CharArg  = :CharArg;                                        // update table entry
 
        if sqlcod = 100;                                                      // if no match found
          exec sql insert into stdxref
-           (reftable, numarg, chararg, datearg,
-            hidden,   numres, charres, dateres)
+           (RefTable, NumArg, CharArg, DateArg,
+            Hidden,   NumRes, CharRes, DateRes)
              values(:RefTable, :NumArg,  :CharArg, :DateArg,
                     :Hidden,   :NumRes,  :CharRes, :DateRes);                // insert table entry
        endif;                                                                // if no match found
@@ -485,13 +483,13 @@
        dcl-proc isNumericArg export;                                         // xref is numeric arg
 
        dcl-pi isNumericArg ind;                                              // xref is numeric arg
-         RefTable like(StdXrefI.reftable) const;                             // reference table
+         RefTable like(StdXrefI.RefTable) const;                             // reference table
        end-pi;                                                               // xref is numeric arg
 
        dcl-s CountX packed(3);                                               // count or records
 
        exec sql select count(*) into :CountX from stdxref
-         where reftable = :RefTable and numarg > 0;                          // recs with num arg
+         where RefTable = :RefTable and NumArg > 0;                          // recs with num arg
 
        return (CountX > 0);                                                  // true if positive
 
@@ -504,13 +502,13 @@
        dcl-proc isDateArg export;                                            // xref is date arg
 
        dcl-pi isDateArg ind;                                                 // xref is date arg
-         RefTable like(StdXrefI.reftable) const;                             // reference table
+         RefTable like(StdXrefI.RefTable) const;                             // reference table
        end-pi;                                                               // xref is date arg
 
        dcl-s CountX packed(3);                                               // count or records
 
        exec sql select count(*) into :CountX from stdxref
-         where reftable = :RefTable and datearg > date('0001-01-01');        // recs with date arg
+         where RefTable = :RefTable and DateArg > date('0001-01-01');        // recs with date arg
 
        return (CountX > 0);                                                  // true if positive
 
@@ -523,15 +521,15 @@
 
        dcl-proc FindXrefArg export;                                          // find xref argument
 
-       dcl-pi FindXrefArg like(StdXrefI.chararg);                            // find xref argument
-         RefTable like(StdXrefI.reftable) const;                             // reference table
-         ArgType  like(StdXrefI.hidden)   const;                             // argument type
-         ResType  like(StdXrefI.hidden)   const;                             // result type shown
+       dcl-pi FindXrefArg like(StdXrefI.CharArg);                            // find xref argument
+         RefTable like(StdXrefI.RefTable) const;                             // reference table
+         ArgType  like(StdXrefI.Hidden)   const;                             // argument type
+         ResType  like(StdXrefI.Hidden)   const;                             // result type shown
        end-pi;                                                               // find xref argument
 
-       dcl-s SelectedArg like(StdXrefI.chararg);                             // selected argument
-       dcl-s ValidateArg like(StdXrefI.chararg);                             // validate search arg
-       dcl-s ValidateRes like(StdXrefI.chararg);                             // validate search rslt
+       dcl-s SelectedArg like(StdXrefI.CharArg);                             // selected argument
+       dcl-s ValidateArg like(StdXrefI.CharArg);                             // validate search arg
+       dcl-s ValidateRes like(StdXrefI.CharArg);                             // validate search rslt
 
        dcl-ds *n;                                                            // arg/result types
          Types char(12) inz('CHARDATENUMR');                                 // type abbreviations
@@ -546,23 +544,23 @@
        c3ResType  = Abbrv(%lookup(ResType:Codes)) + ' Result';               // result column title
 
        exec sql declare FindXrefArgX1 cursor for
-         select case when :ArgType = 'N' then char(numarg)
-                     when :ArgType = 'D' then char(datearg)
-                                         else chararg end,
-                case when :ResType = 'N' then char(numres)
-                     when :ResType = 'D' then char(dateres)
-                                         else charres end
+         select case when :ArgType = 'N' then char(NumArg)
+                     when :ArgType = 'D' then char(DateArg)
+                                         else CharArg end,
+                case when :ResType = 'N' then char(NumRes)
+                     when :ResType = 'D' then char(DateRes)
+                                         else CharRes end
            from StdXref
-             where reftable = :RefTable
-               and hidden  <> 'Y'
+             where RefTable = :RefTable
+               and Hidden  <> 'Y'
                and (:c3Argument = ' ' or
-                    :c3ArgType  = 'N' and numarg  >= decimal(:c3Argument) or
-                    :c3ArgType  = 'C' and chararg >= :c3Argument          or
-                    :c3ArgType  = 'D' and char(datearg, ISO) >= :c3Argument)
+                    :c3ArgType  = 'N' and NumArg  >= decimal(:c3Argument) or
+                    :c3ArgType  = 'C' and CharArg >= :c3Argument          or
+                    :c3ArgType  = 'D' and char(DateArg, ISO) >= :c3Argument)
                and (:c3Result   = ' ' or
-                    :c3ResType  = 'N' and numres  >= decimal(:c3Result)   or
-                    :c3ResType  = 'C' and charres >= :c3Result            or
-                    :c3ResType  = 'D' and char(dateres, ISO) >= :c3Result)
+                    :c3ResType  = 'N' and NumRes  >= decimal(:c3Result)   or
+                    :c3ResType  = 'C' and CharRes >= :c3Result            or
+                    :c3ResType  = 'D' and char(DateRes, ISO) >= :c3Result)
                  order by 1;                                                 // all table entries
 
        dou Ind.Cancel or SelectedArg > *blanks;                              // until canc or select
@@ -660,14 +658,14 @@
 
        dcl-proc FindXrefArgN export;                                         // find xref num arg
 
-       dcl-pi FindXrefArgN like(StdXrefI.numarg);                            // find xref num arg
-         RefTable like(StdXrefI.reftable) const;                             // reference table
-         PrvValue like(StdXrefI.numarg)   const options(*nopass);            // previous value
-         ResType  like(StdXrefI.hidden)   const options(*nopass);            // result type shown
+       dcl-pi FindXrefArgN like(StdXrefI.NumArg);                            // find xref num arg
+         RefTable like(StdXrefI.RefTable) const;                             // reference table
+         PrvValue like(StdXrefI.NumArg)   const options(*nopass);            // previous value
+         ResType  like(StdXrefI.Hidden)   const options(*nopass);            // result type shown
        end-pi;                                                               // find xref num arg
 
-       dcl-s ResTypeX    like(StdXrefI.hidden);                              // result type shown
-       dcl-s SelectedArg like(StdXrefI.chararg);                             // selected argument
+       dcl-s ResTypeX    like(StdXrefI.Hidden);                              // result type shown
+       dcl-s SelectedArg like(StdXrefI.CharArg);                             // selected argument
 
        if %parms >= 3 and (ResType = 'N' or ResType = 'D');                  // if num or date type
          ResTypeX = ResType;                                                 // use the type passed
@@ -692,14 +690,14 @@
 
        dcl-proc FindXrefArgC export;                                         // find xref char arg
 
-       dcl-pi FindXrefArgC like(StdXrefI.chararg);                           // find xref char arg
-         RefTable like(StdXrefI.reftable) const;                             // reference table
-         PrvValue like(StdXrefI.chararg)  const options(*nopass);            // previous value
-         ResType  like(StdXrefI.hidden)   const options(*nopass);            // result type shown
+       dcl-pi FindXrefArgC like(StdXrefI.CharArg);                           // find xref char arg
+         RefTable like(StdXrefI.RefTable) const;                             // reference table
+         PrvValue like(StdXrefI.CharArg)  const options(*nopass);            // previous value
+         ResType  like(StdXrefI.Hidden)   const options(*nopass);            // result type shown
        end-pi;                                                               // find xref char arg
 
-       dcl-s ResTypeX    like(StdXrefI.hidden);                              // result type shown
-       dcl-s SelectedArg like(StdXrefI.chararg);                             // selected argument
+       dcl-s ResTypeX    like(StdXrefI.Hidden);                              // result type shown
+       dcl-s SelectedArg like(StdXrefI.CharArg);                             // selected argument
 
        if %parms >= 3 and (ResType = 'N' or ResType = 'D');                  // if num or date type
          ResTypeX = ResType;                                                 // use the type passed
@@ -724,14 +722,14 @@
 
        dcl-proc FindXrefArgD export;                                         // find xref date arg
 
-       dcl-pi FindXrefArgD like(StdXrefI.datearg);                           // find xref date arg
-         RefTable like(StdXrefI.reftable) const;                             // reference table
-         PrvValue like(StdXrefI.datearg)  const options(*nopass);            // previous value
-         ResType  like(StdXrefI.hidden)   const options(*nopass);            // result type shown
+       dcl-pi FindXrefArgD like(StdXrefI.DateArg);                           // find xref date arg
+         RefTable like(StdXrefI.RefTable) const;                             // reference table
+         PrvValue like(StdXrefI.DateArg)  const options(*nopass);            // previous value
+         ResType  like(StdXrefI.Hidden)   const options(*nopass);            // result type shown
        end-pi;                                                               // find xref date arg
 
-       dcl-s ResTypeX    like(StdXrefI.hidden);                              // result type shown
-       dcl-s SelectedArg like(StdXrefI.chararg);                             // selected argument
+       dcl-s ResTypeX    like(StdXrefI.Hidden);                              // result type shown
+       dcl-s SelectedArg like(StdXrefI.CharArg);                             // selected argument
 
        if %parms >= 3 and (ResType = 'N' or ResType = 'D');                  // if num or date type
          ResTypeX = ResType;                                                 // use the type passed
@@ -751,7 +749,7 @@
 
       **********************************************************************************************
       *
-      *  Printh for a date argument in a specified reference table.
+      *  Prints all entries in a specified reference table.
       *  Note that this function post-dates the addition of date arguments/results.
 
        dcl-proc PrintXrefTable export;                                       // print xref tables
@@ -763,7 +761,17 @@
        dcl-ds StdXrefH likeds(StdXrefI) inz;                                 // ref table headers
        dcl-ds StdXrefD likeds(StdXrefI) inz;                                 // ref table detail
 
-       dcl-s RefTableX like(StdXrefI.RefTable);                              // reference table
+       dcl-s RefTableX  like(StdXrefI.RefTable);                             // reference table
+       dcl-s CharPos    int(5);                                              // character position
+       dcl-s LinesReqd  int(5);                                              // print lines required
+       dcl-s CharResLen int(5);                                              // char result length
+       dcl-s CharPrtLen int(5) inz(%len(p1CharRes));                         // char result prt leng
+       dcl-s NArgActive ind;                                                 // numeric arg active
+       dcl-s CArgActive ind;                                                 // char arg active
+       dcl-s DArgActive ind;                                                 // date arg active
+       dcl-s NResActive ind;                                                 // numeric res active
+       dcl-s CResActive ind;                                                 // char res active
+       dcl-s DResActive ind;                                                 // date res active
 
        if %parms >= 1 and RefTable > *blanks;                                // if ref table passed
          RefTableX = RefTable;                                               // just one table
@@ -790,6 +798,48 @@
 
        dow sqlcod = 0;                                                       // while more headers
 
+         exec sql
+           select case when CharRes > ' ' then '1' else '0' end
+             into :NArgActive from StdXref
+               where RefTable = :TableGuide
+                 and NumArg   = :StdXrefH.EntityID
+                 and CharArg  = 'NUMARG';                                    // is numer arg active
+
+         exec sql
+           select case when CharRes > ' ' then '1' else '0' end
+             into :CArgActive from StdXref
+               where RefTable = :TableGuide
+                 and NumArg   = :StdXrefH.EntityID
+                 and CharArg  = 'CHARARG';                                   // is char arg active
+
+         exec sql
+           select case when CharRes > ' ' then '1' else '0' end
+             into :DArgActive from StdXref
+               where RefTable = :TableGuide
+                 and NumArg   = :StdXrefH.EntityID
+                 and CharArg  = 'DATEARG';                                   // is date arg active
+
+         exec sql
+           select case when CharRes > ' ' then '1' else '0' end
+             into :NResActive from StdXref
+               where RefTable = :TableGuide
+                 and NumArg   = :StdXrefH.EntityID
+                 and CharArg  = 'NUMRES';                                    // is numer res active
+
+         exec sql
+           select case when CharRes > ' ' then '1' else '0' end
+             into :CResActive from StdXref
+               where RefTable = :TableGuide
+                 and NumArg   = :StdXrefH.EntityID
+                 and CharArg  = 'CHARRES';                                   // is char res active
+
+         exec sql
+           select case when CharRes > ' ' then '1' else '0' end
+             into :DResActive from StdXref
+               where RefTable = :TableGuide
+                 and NumArg   = :StdXrefH.EntityID
+                 and CharArg  = 'DATERES';                                   // is date res active
+
          p1UsrPrf = pgmsts.curusr;                                           // current user profile
          p1RefTbl = StdXrefH.RefTable;                                       // ref table name
          p1TblDes = StdXrefH.CharRes;                                        // ref table descriptor
@@ -801,41 +851,61 @@
 
          dow sqlcod = 0;                                                     // while more detail
 
-           p1CharArg = StdXrefD.CharArg;                                     // character argument
-           p1CharRes = StdXrefD.CharRes;                                     // character result
-           p1Hidden  = StdXrefD.Hidden;                                      // hidden flag
+           CharResLen = %len(StdXrefD.CharRes);                              // char result length
+           LinesReqd  = 4 + %div(CharResLen - 1 : CharPrtLen);               // print lines required
 
-           if StdXrefD.DateArg > *loval;                                     // if date argument
-             p1DatArgX = %char(StdXrefD.DateArg : *iso);                     // show actual date
-           else;                                                             // no date argument
-             p1DatArgX = *blanks;                                            // show blanks instead
-           endif;                                                            // if date argument
-
-           if StdXrefD.DateRes > *loval;                                     // if date result
-             p1DatResX = %char(StdXrefD.DateRes : *iso);                     // show actual date
-           else;                                                             // no date result
-             p1DatResX = *blanks;                                            // show blanks instead
-           endif;                                                            // if date result
-
-           if StdXrefD.NumArg > 0 or StdXrefD.CharArg = *blanks and
-                                     StdXrefD.DateArg = *loval;              // if numeric argument
-             p1NumArgX = %trim(%editc(StdXrefD.NumArg:'3'));                 // show actual number
-           else;                                                             // no numeric argument
-             p1NumArgX = *blanks;                                            // show blanks instead
-           endif;                                                            // if numeric argument
-
-           if StdXrefD.NumRes > 0 or StdXrefD.CharRes = *blanks and
-                                     StdXrefD.DateRes = *loval;              // if numeric result
-             p1NumResX = %trim(%editc(StdXrefD.NumRes:'3'));                 // show actual number
-           else;                                                             // no numeric result
-             p1NumResX = *blanks;                                            // show blanks instead
-           endif;                                                            // if numeric result
-
-           if (PrintInf.CurrLine + 4) > PrintInf.OvflLine;                   // if not enough room
+           if (PrintInf.CurrLine + LinesReqd) >= PrintInf.OvflLine;          // if not enough room
              write Header;                                                   // new page header
            endif;                                                            // if not enough room
 
-           write Detail;                                                     // table entry detail
+           if NArgActive;                                                    // if numeric argument
+             p1NumArgX = %trim(%editc(StdXrefD.NumArg:'3'));                 // show its value
+           endif;                                                            // if numeric argument
+
+           if NResActive;                                                    // if numeric result
+             p1NumResX = %trim(%editc(StdXrefD.NumRes:'3'));                 // show its value
+           endif;                                                            // if numeric result
+
+           write NumbDetail;                                                 // numeric detail
+           clear NumbDetail;                                                 // clear numeric values
+
+           if CArgActive;                                                    // if char argument
+             p1CharArg = StdXrefD.CharArg;                                   // show its value
+           endif;                                                            // if char argument
+
+           if CResActive;                                                    // if char result
+             p1CharRes = StdXrefD.CharRes;                                   // show its value
+           endif;                                                            // if char result
+
+           write CharDetail;                                                 // character detail
+           clear CharDetail;                                                 // clear char values
+
+           if CResActive and CharResLen > CharPrtLen;                        // if char res overflow
+
+             CharPos = 1 + CharPrtLen;                                       // overflow position
+
+             dow CharPos <= CharResLen
+                   and %subst(StdXrefD.CharRes : CharPos) > ' ';             // while overflow text
+               p1CharRes = %subst(StdXrefD.CharRes : CharPos);               // portion of result
+               CharPos  += CharPrtLen;                                       // overflow position
+               write CharOvrFlw;                                             // char res overflow
+             enddo;                                                          // while overflow text
+
+           endif;                                                            // if char res overflow
+
+           if DArgActive;                                                    // if date argument
+             p1DatArgX = %char(StdXrefD.DateArg : *iso);                     // show its value
+           endif;                                                            // if date argument
+
+           if DResActive;                                                    // if date result
+             p1DatResX = %char(StdXrefD.DateRes : *iso);                     // show its value
+           endif;                                                            // if date result
+
+           p1Hidden  = StdXrefD.Hidden;                                      // hidden flag
+
+           write DateDetail;                                                 // date detail
+           clear DateDetail;                                                 // clear date values
+           write Separator;                                                  // entry separator line
 
            exec sql fetch from PrintXrefTablesD into :StdXrefD;              // fetch next detail
 
@@ -852,3 +922,128 @@
 
        end-proc;                                                             // print xref tables
 
+      **********************************************************************************************
+      *
+      *  Implies the IBM i user profile number for the specified user ID.
+
+       dcl-proc UserNumber export;                                           // user profile number
+
+       dcl-pi UserNumber int(20);                                            // user profile number
+         UserID char(10) const;                                              // user ID
+       end-pi;                                                               // user profile number
+
+       dcl-s UserNumberX int(20);                                            // user profile number
+
+       exec sql
+         select ifnull(USER_ID_NUMBER, 0) into :UserNumberX
+           from USER_INFO
+             where AUTHORIZATION_NAME = :UserID;                             // retrieve user number
+
+       return UserNumberX;                                                   // return user number
+
+       end-proc;                                                             // user profile number
+
+      **********************************************************************************************
+      *
+      *  Implies whether the specified user is a super administrator.
+
+       dcl-proc isSuperAdmin export;                                         // user is super admin
+
+       dcl-pi isSuperAdmin ind;                                              // user is super admin
+         UserProfile char(10) const options(*nopass);                        // user profile
+       end-pi;                                                               // user is super admin
+
+       dcl-s UserProfileX char(10);                                          // user profile
+
+       if %parms >= 1;                                                       // if profile passed
+         UserProfileX = UserProfile;                                         // use it
+       else;                                                                 // no profile passed
+         UserProfileX = pgmsts.curusr;                                       // use current profile
+       endif;                                                                // if profile passed
+
+       return ValidXrefC(SuperAdmin : UserProfileX);                         // true if super admin
+
+       end-proc;                                                             // user is super admin
+
+      **********************************************************************************************
+      *
+      *  Implies whether the specified user is an administrator for the specified table.
+      *  Applies only if the table has at least one administrator, otherwise the table
+      *    can be maintained by any user.
+
+       dcl-proc isTableAdmin export;                                         // user is table admin
+
+       dcl-pi isTableAdmin ind;                                              // user is table admin
+         RefTable like(StdXrefI.RefTable) const;                             // reference table
+         UserProfile char(10) const options(*nopass);                        // user profile
+       end-pi;                                                               // user is table admin
+
+       dcl-s UserProfileX char(10);                                          // user profile
+       dcl-s UserNumberX int(20);                                            // user number
+       dcl-s CountX packed(3);                                               // count of records
+
+       exec sql select count(*) into :CountX from StdXref
+         where RefTable = :TableAdmin and CharArg = :RefTable;               // num of table admins
+
+       if CountX = 0;                                                        // if table not secured
+         return *on;                                                         // anyone can maintain
+       endif;                                                                // if table not secured
+
+       if %parms >= 1;                                                       // if profile passed
+         UserProfileX = UserProfile;                                         // use it
+       else;                                                                 // no profile passed
+         UserProfileX = pgmsts.curusr;                                       // use current profile
+       endif;                                                                // if profile passed
+
+       if isSuperAdmin(UserProfileX);                                        // if super admin user
+         return *on;                                                         // user has all rights
+       endif;                                                                // if super admin user
+
+       UserNumberX = UserNumber(UserProfileX);                               // user profile number
+
+       return ValidXrefNC(TableAdmin : UserNumberX : RefTable);              // true if table admin
+
+       end-proc;                                                             // user is super admin
+
+      **********************************************************************************************
+      *
+      *  Implies the unique entity ID of a reference table header.
+
+       dcl-proc getTableID export;                                           // get table entity ID
+
+       dcl-pi getTableID like(StdXrefI.EntityID);                            // get table entity ID
+         RefTable like(StdXrefI.RefTable) const;                             // reference table
+       end-pi;                                                               // get table entity ID
+
+       dcl-s EntityIDx like(StdXrefI.EntityID);                              // table entity ID
+
+       exec sql select EntityID into :EntityIDx from StdXref
+         where RefTable = :RefTable
+           and CharArg  = :Marker;                                           // ID of table header
+
+       return EntityIDx;                                                     // return entity ID
+
+       end-proc;                                                             // get table entity ID
+
+      **********************************************************************************************
+      *
+      *  Implies the number of entries in the specified reference table.
+
+       dcl-proc NumberOfEntries export;                                      // number of entries
+
+       dcl-pi NumberOfEntries int(5);                                        // number of entries
+         RefTable like(StdXrefI.RefTable) const;                             // reference table
+       end-pi;                                                               // number of entries
+
+       dcl-s CountX int(5);                                                  // record count
+
+       exec sql
+         select ifnull(count(*), 0) into :CountX from StdXref
+           where RefTable = :RefTable
+             and CharArg <> :Marker;                                         // exclude table header
+
+       return CountX;                                                        // return record count
+
+       end-proc;                                                             // number of entries
+
+      **********************************************************************************************

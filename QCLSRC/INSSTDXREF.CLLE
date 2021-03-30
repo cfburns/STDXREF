@@ -2,7 +2,7 @@
 /*                                                                            */
 /*  STANDARD CROSS REFERENCE - INSTALLATION SCRIPT                            */
 /*                                                                            */
-/*  Copyright (C) 2006, 2020  Christopher F. Burns Sr.                        */
+/*  Copyright (C) 2006, 2021  Christopher F. Burns Sr.                        */
 /*                                                                            */
 /*  This program is free software: you can redistribute it and/or modify      */
 /*  it under the terms of the GNU General Public License as published by      */
@@ -24,21 +24,23 @@
 /*  HOUSEKEEPING                                                              */
 /******************************************************************************/
 
-             PGM        PARM(&INSLIB &USRPRF)
+             PGM        PARM(&INSLIB &OWNPRF &SUPADM)
 
              DCLF       FILE(QADSPOBJ) OPNID(A)
              DCLF       FILE(QAFDMBRL) OPNID(B)
 
+             DCL        VAR(&SQUOTE) TYPE(*CHAR) LEN(1) VALUE(X'7D')
              DCL        VAR(&OSRELS) TYPE(*CHAR) LEN(9)
              DCL        VAR(&INSLIB) TYPE(*CHAR) LEN(10)
-             DCL        VAR(&USRPRF) TYPE(*CHAR) LEN(10)
+             DCL        VAR(&OWNPRF) TYPE(*CHAR) LEN(10)
+             DCL        VAR(&SUPADM) TYPE(*CHAR) LEN(10)
              DCL        VAR(&CURLIB) TYPE(*CHAR) LEN(10)
              DCL        VAR(&SRCSAV) TYPE(*CHAR) LEN(10)
              DCL        VAR(&SRCPTH) TYPE(*CHAR) LEN(64)
              DCL        VAR(&LIBPTH) TYPE(*CHAR) LEN(64)
              DCL        VAR(&MBRPTH) TYPE(*CHAR) LEN(64)
              DCL        VAR(&MSGTXT) TYPE(*CHAR) LEN(128)
-             DCL        VAR(&SQLSTM) TYPE(*CHAR) LEN(128)
+             DCL        VAR(&SQLSTM) TYPE(*CHAR) LEN(512)
 
              RTVJOBA    CURLIB(&CURLIB)
 
@@ -48,8 +50,6 @@
 
              RTVOBJD    OBJ(QSYS/QWCISCFR) OBJTYPE(*PGM) +
                           SYSLVL(&OSRELS)
-
-             DMPCLPGM
 
              IF         COND(&OSRELS *LT 'V07R02M00') THEN(DO)
 
@@ -61,13 +61,62 @@
                         ENDDO
 
 /******************************************************************************/
-/*  CREATE SPECIFIED LIBRARIES AND USER PROFILE.                              */
+/*  CREATE OWNER USER PROFILE IF IT DOES NOT EXIST.                           */
+/******************************************************************************/
+
+ USRPRF:     IF         COND(&OWNPRF *EQ '*CURRENT') THEN(RTVJOBA +
+                          USER(&OWNPRF))
+
+             ELSE       CMD(DO)
+
+                        CRTUSRPRF  USRPRF(&OWNPRF) PWDEXP(*YES) +
+                          STATUS(*DISABLED) USRCLS(*PGMR) +
+                          CURLIB(&INSLIB) INLPGM(*NONE) +
+                          INLMNU(*SIGNOFF) LMTCPB(*YES)
+
+                        MONMSG     MSGID(CPF0000)
+
+                        ENDDO
+
+             CHKOBJ     OBJ(&OWNPRF) OBJTYPE(*USRPRF)
+
+             MONMSG     MSGID(CPF9800) EXEC(DO)
+                        CHGVAR     VAR(&MSGTXT) VALUE('Owner user profile' +
+                          *BCAT &OWNPRF *BCAT 'could not be created.')
+                        GOTO       CMDLBL(EXIT)
+                        ENDDO
+
+/******************************************************************************/
+/*  VERIFY SUPER ADMINISTRATOR USER PROFILE.                                  */
+/******************************************************************************/
+
+             IF         COND(&SUPADM *EQ '*OWNPRF') THEN(CHGVAR +
+                          VAR(&SUPADM) VALUE(&OWNPRF))
+
+             ELSE       CMD(IF COND(&SUPADM *EQ '*CURRENT') +
+                          THEN(RTVJOBA USER(&SUPADM)))
+
+             ELSE       CMD(IF COND(&SUPADM *NE &OWNPRF) THEN(DO))
+
+             CHKOBJ     OBJ(&SUPADM) OBJTYPE(*USRPRF)
+
+             MONMSG     MSGID(CPF9800) EXEC(DO)
+                        CHGVAR     VAR(&MSGTXT) VALUE('Super administrator +
+                          user profile' *BCAT &SUPADM *BCAT 'not +
+                          found.')
+                        GOTO       CMDLBL(EXIT)
+                        ENDDO
+
+             ENDDO
+
+/******************************************************************************/
+/*  CREATE APPLICATION LIBRARY.                                               */
 /******************************************************************************/
 
              CHGVAR     VAR(&SQLSTM) VALUE('CREATE SCHEMA' *BCAT +
                           &INSLIB)
 
-             RUNSQL     SQL(&SQLSTM)
+             RUNSQL     SQL(&SQLSTM) DATFMT(*ISO)
 
              MONMSG     MSGID(CPF2111 SQL0601) EXEC(DO)
                         CHGVAR     VAR(&MSGTXT) VALUE('Installation library' +
@@ -75,12 +124,7 @@
                         GOTO       CMDLBL(EXIT)
                         ENDDO
 
- USRPRF:     CRTUSRPRF  USRPRF(&USRPRF) PWDEXP(*YES) USRCLS(*PGMR) +
-                          CURLIB(&INSLIB) INLPGM(*NONE) +
-                          INLMNU(*SIGNOFF) LMTCPB(*YES)
-                        MONMSG     MSGID(CPF0000)
-
-             CHGOBJOWN  OBJ(&INSLIB) OBJTYPE(*LIB) NEWOWN(&USRPRF) +
+             CHGOBJOWN  OBJ(&INSLIB) OBJTYPE(*LIB) NEWOWN(&OWNPRF) +
                           CUROWNAUT(*REVOKE)
                         MONMSG     MSGID(CPF0000)
 
@@ -107,7 +151,7 @@
 
              RUNSQLSTM  SRCFILE(&INSLIB/QTXTSRC) SRCMBR(STDXREF) +
                           COMMIT(*NONE) NAMING(*SYS) ERRLVL(40) +
-                          DFTRDBCOL(*NONE)
+                          DATFMT(*ISO) DFTRDBCOL(*NONE)
                         MONMSG     MSGID(SQL0000)
 
 /******************************************************************************/
@@ -117,7 +161,8 @@
              IF         COND(&OSRELS *GE 'V07R03M00') THEN(DO)
 
              RUNSQLSTM  SRCFILE(&INSLIB/QTXTSRC) SRCMBR(STDXREFVER) +
-                          COMMIT(*NONE) NAMING(*SYS) DFTRDBCOL(*NONE)
+                          COMMIT(*NONE) NAMING(*SYS) DATFMT(*ISO) +
+                          DFTRDBCOL(*NONE)
                         MONMSG     MSGID(SQL0000)
 
              ENDDO
@@ -186,11 +231,11 @@
 /******************************************************************************/
 
              RUNSQLSTM  SRCFILE(&INSLIB/QTXTSRC) SRCMBR(STDXREFIOP) +
-                          COMMIT(*NONE) ERRLVL(40)
+                          COMMIT(*NONE) ERRLVL(40) DATFMT(*ISO)
                         MONMSG     MSGID(SQL0000)
 
              RUNSQLSTM  SRCFILE(&INSLIB/QTXTSRC) SRCMBR(STDXREFFNC) +
-                          COMMIT(*NONE) ERRLVL(40)
+                          COMMIT(*NONE) ERRLVL(40) DATFMT(*ISO)
                         MONMSG     MSGID(SQL0000)
 
 /******************************************************************************/
@@ -273,7 +318,7 @@
                         MONMSG     MSGID(CPF0000) EXEC(GOTO CMDLBL(ENDOBJ))
 
              CHGOBJOWN  OBJ(&A_ODLBNM/&A_ODOBNM) OBJTYPE(&A_ODOBTP) +
-                          NEWOWN(&USRPRF)
+                          NEWOWN(&OWNPRF)
 
              GRTOBJAUT  OBJ(&A_ODLBNM/&A_ODOBNM) OBJTYPE(&A_ODOBTP) +
                           USER(*PUBLIC) AUT(*CHANGE) REPLACE(*YES)
@@ -282,6 +327,36 @@
              GOTO       CMDLBL(NXTOBJ)
 
  ENDOBJ:
+
+/******************************************************************************/
+/*  SET SUPER ADMIN USER.                                                     */
+/******************************************************************************/
+
+             RUNSQLSTM  SRCFILE(&INSLIB/QTXTSRC) SRCMBR(STDXREFADM) +
+                          COMMIT(*NONE) NAMING(*SYS) ERRLVL(40) +
+                          DATFMT(*ISO) DFTRDBCOL(*NONE)
+
+             MONMSG     MSGID(CPF0000 SQL0000) EXEC(DO)
+                        CHGVAR     VAR(&MSGTXT) VALUE('Could not establish +
+                          SUPERADMIN reference table.')
+                        GOTO       CMDLBL(EXIT)
+                        ENDDO
+
+             CHGVAR     VAR(&SQLSTM) VALUE('UPDATE STDXREF SET +
+                          CHARARG =' *BCAT &SQUOTE *TCAT &SUPADM +
+                          *TCAT &SQUOTE *BCAT 'WHERE REFTABLE =' +
+                          *BCAT &SQUOTE *TCAT 'SUPERADMIN' *TCAT +
+                          &SQUOTE *BCAT 'AND CHARARG =' *BCAT +
+                          &SQUOTE *TCAT '??????????' *TCAT &SQUOTE)
+
+             RUNSQL     SQL(&SQLSTM) COMMIT(*NONE) DATFMT(*ISO)
+
+             MONMSG     MSGID(CPF0000 SQL0000) EXEC(DO)
+                        CHGVAR     VAR(&MSGTXT) VALUE('Could not establish +
+                          SUPERADMIN reference table.')
+                        GOTO       CMDLBL(EXIT)
+                        ENDDO
+
 
 /******************************************************************************/
 /*  COPY SOURCE TO ROOT FILE SYSTEM.                                          */
@@ -343,6 +418,9 @@
              CHGVAR     VAR(&MSGTXT) VALUE('STDXREF successfully +
                           installed to library' *BCAT &INSLIB *TCAT +
                           '.')
+
+             COMMIT
+                        MONMSG     MSGID(CPF0000)
 
  EXIT:       SNDPGMMSG  MSG(&MSGTXT)
 

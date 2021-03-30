@@ -2,7 +2,7 @@
      A*
      A*  STANDARD CROSS REFERENCE MAINTENANCE (CURRENT)
      A*
-     A*  Copyright (C) 2006, 2020  Christopher F. Burns Sr.
+     A*  Copyright (C) 2006, 2021  Christopher F. Burns Sr.
      A*
      A*  This program is free software: you can redistribute it and/or modify
      A*  it under the terms of the GNU General Public License as published by
@@ -31,14 +31,16 @@
      A N34                                  DSPATR(PR)
      A N34                                  DSPATR(ND)
      A                                      VALUES(' ' 'P' 'T' 'X')
-     A            S1REFTBL      15A  O  6  7
-     A            S1TBLDES      50A  O  6 25
+     A            S1REFTBL      15A  O  6  6
+     A            S1TBLDES      50A  O  6 23
+     A            S1ENTRIES      4Y 0O  6 75EDTCDE(1)
+     A N34                                  DSPATR(ND)
      A*
      A          R STDXREFC1                 SFLCTL(STDXREFS1)
      A                                      SFLSIZ(0750)
      A                                      SFLPAG(0015)
      A                                      CA03(03 'Exit')
-     A                                      CF06(06 'Create')
+     A  99                                  CF06(06 'Create')
      A                                      CF21(21 'Print')
      A                                      OVERLAY
      A  31                                  SFLDSP
@@ -49,6 +51,7 @@
      A                                  1 12'X=Select'
      A                                  1 22'P=Print'
      A                                  1 31'T=Table'
+     A N99                                  DSPATR(ND)
      A                                  1 60'Standard X-Ref Maint'
      A                                      DSPATR(RI)
      A                                      COLOR(BLU)
@@ -61,10 +64,12 @@
      A                                      EDTCDE(Y)
      A                                  5  2'Op'
      A                                      DSPATR(UL)
-     A                                  5  7'Xref Table     '
+     A                                  5  6'Xref Table     '
      A                                      DSPATR(UL)
-     A                                  5 25'Description                       -
+     A                                  5 23'Description                       -
      A                                                      '
+     A                                      DSPATR(UL)
+     A                                  5 75'# Ent'
      A                                      DSPATR(UL)
      A*
      A          R STDXREFK1
@@ -73,6 +78,7 @@
      A                                      COLOR(BLU)
      A                                 24 22'F6=Create'
      A                                      COLOR(BLU)
+     A N99                                  DSPATR(ND)
      A                                 24 44'F21=Print'
      A                                      COLOR(BLU)
      A                                 24 66'ENTER=Continue'
@@ -80,15 +86,15 @@
      A*
      A          R STDXREFW1
      A                                      CA12(12 'Cancel')
-     A                                      CF23(23 'Delete')
-     A                                      WINDOW(4 5 4 68 *NOMSGLIN)
+     A  99N97                               CF23(23 'Delete')
+     A                                      WINDOW(4 4 14 67 *NOMSGLIN)
      A                                      WDWBORDER((*COLOR BLU) (*DSPATR RI)-
      A                                       (*CHAR '        '))
      A                                      USRRSTDSP
      A            W1ENTITYID    10Y 0H
      A                                  1  1'Xref Table     '
      A                                      DSPATR(UL)
-     A                                  1 19'Description                       -
+     A                                  1 18'Description (Required)            -
      A                                                      '
      A                                      DSPATR(UL)
      A            W1REFTBL      15A  B  2  1
@@ -99,46 +105,106 @@
      A                                      iption are required' 69)
      A  36 67                               ERRMSG('Table name already exists' -
      A                                      67)
-     A            W1TBLDES      50A  B  2 19
+     A            W1TBLDES      50A  B  2 18
      A  37                                  COLOR(YLW)
      A  37                                  DSPATR(UL)
      A N37                                  DSPATR(PR)
-     A                                  4  1'F12=Cancel'
+     A                                  4  1'Arguments:'
+     A                                      DSPATR(HI)
+     A                                  4 18'Description (Required to enable)  -
+     A                                                      '
+     A                                      DSPATR(UL)
+     A                                  5  3'NUMERIC       '
+     A                                      DSPATR(UL)
+     A            W1NARGTEXT    50A  B  5 18
+     A  37                                  COLOR(YLW)
+     A  37                                  DSPATR(UL)
+     A N37                                  DSPATR(PR)
+     A  68                                  ERRMSG('At least one argument must -
+     A                                      be enabled with a description' 68)
+     A N37                                  DSPATR(HI)
+     A                                  6  3'CHARACTER     '
+     A                                      DSPATR(UL)
+     A            W1CARGTEXT    50A  B  6 18
+     A  37                                  COLOR(YLW)
+     A  37                                  DSPATR(UL)
+     A N37                                  DSPATR(PR)
+     A N37                                  DSPATR(HI)
+     A                                  7  3'DATE          '
+     A                                      DSPATR(UL)
+     A            W1DARGTEXT    50A  B  7 18
+     A  37                                  COLOR(YLW)
+     A  37                                  DSPATR(UL)
+     A N37                                  DSPATR(PR)
+     A N37                                  DSPATR(HI)
+     A                                  9  1'Results:'
+     A                                      DSPATR(HI)
+     A                                  9 18'Description (Required to enable)  -
+     A                                                      '
+     A                                      DSPATR(UL)
+     A                                 10  3'NUMERIC       '
+     A                                      DSPATR(UL)
+     A            W1NRESTEXT    50A  B 10 18
+     A  37                                  COLOR(YLW)
+     A  37                                  DSPATR(UL)
+     A N37                                  DSPATR(PR)
+     A N37                                  DSPATR(HI)
+     A                                 11  3'CHARACTER     '
+     A                                      DSPATR(UL)
+     A            W1CRESTEXT    50A  B 11 18
+     A  37                                  COLOR(YLW)
+     A  37                                  DSPATR(UL)
+     A N37                                  DSPATR(PR)
+     A N37                                  DSPATR(HI)
+     A                                 12  3'DATE          '
+     A                                      DSPATR(UL)
+     A            W1DRESTEXT    50A  B 12 18
+     A  37                                  COLOR(YLW)
+     A  37                                  DSPATR(UL)
+     A N37                                  DSPATR(PR)
+     A N37                                  DSPATR(HI)
+     A                                 14  1'F12=Cancel'
      A                                      COLOR(BLU)
-     A                                  4 28'F23=Delete'
+     A                                 14 28'F23=Delete'
      A                                      COLOR(BLU)
-     A                                  4 55'ENTER=Continue'
+     A  97
+     AON99                                  DSPATR(ND)
+     A                                 14 54'ENTER=Continue'
      A                                      COLOR(BLU)
      A*
-     A*  REFERENCE TABLE ENTRY SUBFILE & EDIT WINDOW
+     A*  REFERENCE TABLE ENTRY SUBFILE & EDIT WINDOWS
      A*
      A          R STDXREFS2                 SFL
      A                                      SFLNXTCHG
      A            S2ENTITYID    10Y 0H
      A            S2NUMARG      10Y 0H
      A            S2NUMRES      15Y 5H
-     A            S2DATEARG       L  H
-     A            S2DATERES       L  H
+     A            S2CHARARG     15A  H
+     A            S2CHARRES    250A  H
+     A            S2DATEARG       L  H      DATFMT(*ISO)
+     A            S2DATERES       L  H      DATFMT(*ISO)
      A
      A                                  7  2' '
-     A            S2OPTION       1A  B  8  2COLOR(YLW)
+     A            S2OPTION       1A  B  8  2
+     A  44                                  COLOR(YLW)
      A N44                                  DSPATR(PR)
+     A N44                                  DSPATR(ND)
      A                                      VALUES(' ' 'X')
      A            S2NUMARGX     10A  O  8  5
      A                                  8 21'<NUMR>'
      A                                      COLOR(BLU)
-     A N44                                  DSPATR(ND)
+     A N45                                  DSPATR(ND)
      A            S2NUMRESX     20A  O  8 28
-     A            S2CHARARG     15A  O  9  5
+     A            S2CHARARGX    15A  O  9  5
      A N44                                  DSPATR(ND)
      A                                  9 21'<CHAR>'
      A                                      COLOR(BLU)
-     A N44                                  DSPATR(ND)
-     A            S2CHARRES     50A  O  9 28
+     A N45                                  DSPATR(ND)
+     A            S2CHARRESX    50A  O  9 28
      A            S2DATARGX     10A  O 10  5
      A                                 10 21'<DATE>'
      A                                      COLOR(BLU)
-     A N44                                  DSPATR(ND)
+     A N45                                  DSPATR(ND)
      A            S2DATRESX     10A  O 10 28
      A                                 10 69'Hidden:'
      A N44                                  DSPATR(ND)
@@ -149,16 +215,17 @@
      A                                      SFLSIZ(0300)
      A                                      SFLPAG(0004)
      A                                      CA03(03 'Exit')
-     A                                      CF06(06 'Create')
+     A  98                                  CF06(06 'Create')
+     A                                      CF08(08 'Guide')
      A                                      CA12(12 'Cancel')
      A                                      CF21(21 'Print')
-     A                                      CF23(23 'Delete')
+     A  99N97                               CF23(23 'Delete')
      A                                      OVERLAY
      A  41                                  SFLDSP
      A  41                                  SFLDSPCTL
      A N41                                  SFLCLR
      A  41                                  SFLEND(*MORE)
-     A            C2RCDCURS      4  0H      SFLRCDNBR(CURSOR)
+     A            C2RCDCURS      4S 0H      SFLRCDNBR(CURSOR)
      A                                  1  2'Table:'
      A            C2REFTBL      15A  O  1 10
      A                                  1 60'Standard X-Ref Maint'
@@ -182,32 +249,39 @@
      A                                  5 28'Result                            -
      A                                                      '
      A                                      DSPATR(UL)
-     A            C2ARGPOSN     15   B  6  5COLOR(YLW)
+     A            C2ARGPOSN     15A  B  6  5COLOR(YLW)
      A                                  6 21'<POSN>'
-     A            C2RESPOSN     50   B  6 28COLOR(YLW)
+     A            C2RESPOSN     50A  B  6 28COLOR(YLW)
      A*
      A          R STDXREFK2
      A                                      OVERLAY
      A                                 24  2'F3=Exit'
      A                                      COLOR(BLU)
-     A                                 24 13'F6=Create'
+     A                                 24 11'F6=Create'
      A                                      COLOR(BLU)
-     A                                 24 26'F12=Cancel'
+     A N98                                  DSPATR(ND)
+     A                                 24 22'F8=Guide'
      A                                      COLOR(BLU)
-     A                                 24 39'F21=Print'
+     A                                 24 32'F12=Cancel'
      A                                      COLOR(BLU)
-     A                                 24 52'F23=Delete'
+     A                                 24 44'F21=Prnt'
      A                                      COLOR(BLU)
+     A                                 24 54'F23=Delete'
+     A                                      COLOR(BLU)
+     A  97
+     AON99                                  DSPATR(ND)
      A                                 24 66'ENTER=Continue'
      A                                      COLOR(BLU)
      A*
      A          R STDXREFW2
-     A                                      CA12(12 'Cancel')
-     A                                      CF23(23 'Delete')
      A                                      WINDOW(4 3 7 73 *NOMSGLIN)
+     A                                      CF10(10 'Long')
+     A                                      CA12(12 'Cancel')
+     A  98N96                               CF23(23 'Delete')
      A                                      WDWBORDER((*COLOR BLU) (*DSPATR RI)-
      A                                       (*CHAR '        '))
      A                                      USRRSTDSP
+     A                                      CSRINPONLY
      A            W2ENTITYID    10Y 0H
      A                                  1  1'Argument       '
      A                                      DSPATR(UL)
@@ -216,40 +290,60 @@
      A                                  1 24'Result                            -
      A                                                      '
      A                                      DSPATR(UL)
-     A            W2NUMARG      10Y 0B  3  1EDTCDE(4)
+     A            W2NUMARG      10Y 0B  3  1EDTCDE(3)
+     A N51                                  DSPATR(ND)
+     A N51
+     AON46                                  DSPATR(PR)
      A  46                                  COLOR(YLW)
      A  46                                  DSPATR(UL)
-     A N46                                  DSPATR(PR)
      A  46 77                               ERRMSG('An entry with these argumen-
      A                                      ts already exists in this table' 77)
      A                                  3 17'<NUMR>'
      A                                      COLOR(BLU)
      A            W2NUMRES      15Y 5B  3 24EDTCDE(4)
+     A N54                                  DSPATR(ND)
+     A N54
+     AON47                                  DSPATR(PR)
      A  47                                  COLOR(YLW)
      A  47                                  DSPATR(UL)
-     A N47                                  DSPATR(PR)
      A            W2CHARARG     15A  B  4  1
+     A N52                                  DSPATR(ND)
+     A N52
+     AON46                                  DSPATR(PR)
      A  46                                  COLOR(YLW)
      A  46                                  DSPATR(UL)
-     A N46                                  DSPATR(PR)
      A  46 76                               ERRMSG('Reserved word cannot be use-
      A                                      d as character argument' 76)
+     A  46 71                               ERRMSG('For SUPERADMIN, character a-
+     A                                      rgument must be a valid user ID' 71)
+     A  46 72                               ERRMSG('For TABLEADMIN, character a-
+     A                                      rgument must be table name' 72)
      A                                  4 17'<CHAR>'
      A                                      COLOR(BLU)
      A            W2CHARRES     50A  B  4 24
+     A N55                                  DSPATR(ND)
+     A N55
+     AON47                                  DSPATR(PR)
      A  47                                  COLOR(YLW)
      A  47                                  DSPATR(UL)
-     A N47                                  DSPATR(PR)
+     A  47 73                               ERRMSG('For TABLEADMIN, character r-
+     A                                      esult must be a valid user ID' 73)
      A            W2DATEARG       L  B  5  1DATFMT(*ISO)
+     A N53                                  DSPATR(ND)
+     A N53
+     AON46                                  DSPATR(PR)
      A  46                                  COLOR(YLW)
      A  46                                  DSPATR(UL)
-     A N46                                  DSPATR(PR)
      A                                  5 17'<DATE>'
      A                                      COLOR(BLU)
      A            W2DATERES       L  B  5 24DATFMT(*ISO)
+     A N56                                  DSPATR(ND)
+     A N56
+     AON47                                  DSPATR(PR)
      A  47                                  COLOR(YLW)
      A  47                                  DSPATR(UL)
-     A N47                                  DSPATR(PR)
+     A                                  5 36'(YYYY-MM-DD)'
+     A N56                                  DSPATR(ND)
      A                                  5 64'Hidden:'
      A  46                                  DSPATR(ND)
      A            W2HIDDEN       1A  B  5 72VALUES('N' 'Y')
@@ -259,9 +353,100 @@
      A  46                                  DSPATR(PR)
      A                                  7  1'F12=Cancel'
      A                                      COLOR(BLU)
-     A                                  7 30'F23=Delete'
+     A                                  7 21'F10=Long'
      A                                      COLOR(BLU)
+     A                                  7 40'F23=Delete'
+     A                                      COLOR(BLU)
+     A  96
+     AON98                                  DSPATR(ND)
      A                                  7 60'ENTER=Continue'
+     A                                      COLOR(BLU)
+     A*
+     A          R STDXREFW2L
+     A                                      CA12(12 'Cancel')
+     A  98N96                               CF23(23 'Delete')
+     A                                      WINDOW(4 3 11 73 *NOMSGLIN)
+     A                                      WDWBORDER((*COLOR BLU) (*DSPATR RI)-
+     A                                       (*CHAR '        '))
+     A                                      USRRSTDSP
+     A                                      CSRINPONLY
+     A            W2ENTITYID    10Y 0H
+     A                                  1  1'Argument       '
+     A                                      DSPATR(UL)
+     A                                  1 18'Type'
+     A                                      DSPATR(UL)
+     A                                  1 24'Result                            -
+     A                                                      '
+     A                                      DSPATR(UL)
+     A            W2NUMARG      10Y 0B  3  1EDTCDE(3)
+     A N51                                  DSPATR(ND)
+     A N51
+     AON46                                  DSPATR(PR)
+     A  46                                  COLOR(YLW)
+     A  46                                  DSPATR(UL)
+     A  46 77                               ERRMSG('An entry with these argumen-
+     A                                      ts already exists in this table' 77)
+     A                                  3 17'<NUMR>'
+     A                                      COLOR(BLU)
+     A            W2NUMRES      15Y 5B  3 24EDTCDE(4)
+     A N54                                  DSPATR(ND)
+     A N54
+     AON47                                  DSPATR(PR)
+     A  47                                  COLOR(YLW)
+     A  47                                  DSPATR(UL)
+     A            W2CHARARG     15A  B  4  1
+     A N52                                  DSPATR(ND)
+     A N52
+     AON46                                  DSPATR(PR)
+     A  46                                  COLOR(YLW)
+     A  46                                  DSPATR(UL)
+     A  46 76                               ERRMSG('Reserved word cannot be use-
+     A                                      d as character argument' 76)
+     A  46 71                               ERRMSG('For SUPERADMIN, character a-
+     A                                      rgument must be a valid user ID' 71)
+     A  46 72                               ERRMSG('For TABLEADMIN, character a-
+     A                                      rgument must be table name' 72)
+     A                                  4 17'<CHR>'
+     A                                      COLOR(BLU)
+     A            W2CHARRESL   250A  B  4 24
+     A N55                                  DSPATR(ND)
+     A N55
+     AON47                                  DSPATR(PR)
+     A  47                                  COLOR(YLW)
+     A  47                                  DSPATR(UL)
+     A  47 73                               ERRMSG('For TABLEADMIN, character r-
+     A                                      esult must be a valid user ID' 73)
+     A                                      CNTFLD(050)
+     A            W2DATEARG       L  B  9  1DATFMT(*ISO)
+     A N53                                  DSPATR(ND)
+     A N53
+     AON46                                  DSPATR(PR)
+     A  46                                  COLOR(YLW)
+     A  46                                  DSPATR(UL)
+     A                                  9 17'<DATE>'
+     A                                      COLOR(BLU)
+     A            W2DATERES       L  B  9 24DATFMT(*ISO)
+     A N56                                  DSPATR(ND)
+     A N56
+     AON47                                  DSPATR(PR)
+     A  47                                  COLOR(YLW)
+     A  47                                  DSPATR(UL)
+     A                                  9 36'(YYYY-MM-DD)'
+     A N56                                  DSPATR(ND)
+     A                                  9 64'Hidden:'
+     A  46                                  DSPATR(ND)
+     A            W2HIDDEN       1A  B  9 72VALUES('N' 'Y')
+     A  47                                  COLOR(YLW)
+     A  47                                  DSPATR(UL)
+     A  46                                  DSPATR(ND)
+     A  46                                  DSPATR(PR)
+     A                                 11  1'F12=Cancel'
+     A                                      COLOR(BLU)
+     A                                 11 30'F23=Delete'
+     A                                      COLOR(BLU)
+     A  96
+     AON98                                  DSPATR(ND)
+     A                                 11 60'ENTER=Continue'
      A                                      COLOR(BLU)
      A*
      A*  CONFIRMATION THAT A REFERENCE TABLE WAS PRINTED
@@ -277,4 +462,3 @@
      A                                  2 23'was printed'
      A                                  4 20'ENTER=Continue'
      A                                      COLOR(BLU)
-     A*

@@ -2,7 +2,7 @@
       *                                                                                            *
       *  STANDARD PROGRAM STATUS DATA STRUCTURE DEFINITION.                                        *
       *                                                                                            *
-      *  Copyright (C) 2006, 2020  Christopher F. Burns Sr.                                        *
+      *  Copyright (C) 2006, 2021  Christopher F. Burns Sr.                                        *
       *                                                                                            *
       *  Use RPG /COPY statement in application programs to include this member.                   *
       *                                                                                            *

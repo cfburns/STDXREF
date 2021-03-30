@@ -2,7 +2,7 @@
 /*                                                                            */
 /*  STANDARD CROSS REFERENCE - INSTALLATION COMMAND                           */
 /*                                                                            */
-/*  Copyright (C) 2006, 2020  Christopher F. Burns Sr.                        */
+/*  Copyright (C) 2006, 2021  Christopher F. Burns Sr.                        */
 /*                                                                            */
 /*  This program is free software: you can redistribute it and/or modify      */
 /*  it under the terms of the GNU General Public License as published by      */
@@ -24,6 +24,11 @@
              PARM       KWD(INSLIB) TYPE(*NAME) MIN(1) +
                           PROMPT('Installation Library')
 
-             PARM       KWD(USRPRF) TYPE(*NAME) MIN(1) PROMPT('Owner +
-                          User Profile')
+             PARM       KWD(OWNPRF) TYPE(*NAME) DFT(*CURRENT) +
+                          SPCVAL((*CURRENT)) PROMPT('Owner User +
+                          Profile')
+
+             PARM       KWD(SUPADM) TYPE(*NAME) DFT(*CURRENT) +
+                          SPCVAL((*OWNPRF) (*CURRENT)) +
+                          PROMPT('Super Admin User Profile')
 

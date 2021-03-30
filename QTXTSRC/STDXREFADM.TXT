@@ -1,0 +1,149 @@
+/******************************************************************************/
+/*                                                                            */
+/*  STANDARD CROSS REFERENCE - ADMINISTRATION                                 */
+/*                                                                            */
+/*  Copyright (C) 2021  Christopher F. Burns Sr.                              */
+/*                                                                            */
+/*  This program is free software: you can redistribute it and/or modify      */
+/*  it under the terms of the GNU General Public License as published by      */
+/*  the Free Software Foundation, either version 3 of the License, or         */
+/*  (at your option) any later version.                                       */
+/*                                                                            */
+/*  This program is distributed in the hope that it will be useful,           */
+/*  but WITHOUT ANY WARRANTY; without even the implied warranty of            */
+/*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the             */
+/*  GNU General Public License for more details.                              */
+/*                                                                            */
+/*  You should have received a copy of the GNU General Public License         */
+/*  along with this program.  If not, see <http://www.gnu.org/licenses/>.     */
+/*                                                                            */
+/******************************************************************************/
+
+INSERT INTO STDXREF(REFTABLE,
+                    NUMARG,
+                    CHARARG,
+                    DATEARG,
+                    NUMRES,
+                    CHARRES,
+                    DATERES,
+                    HIDDEN)
+             VALUES('SUPERADMIN',
+                    0,
+                    'REFTABLE',
+                    DATE('0001-01-01'),
+                    0,
+                    'SUPER ADMINISTRATORS',
+                    DATE('0001-01-01'),
+                    'N');
+
+INSERT INTO STDXREF(REFTABLE,
+                    NUMARG,
+                    CHARARG,
+                    DATEARG,
+                    NUMRES,
+                    CHARRES,
+                    DATERES,
+                    HIDDEN)
+             VALUES('SUPERADMIN',
+                    0,
+                    '??????????',
+                    DATE('0001-01-01'),
+                    0,
+                    ' ',
+                    DATE('0001-01-01'),
+                    'N');
+
+INSERT INTO STDXREF(REFTABLE,
+                    NUMARG,
+                    CHARARG,
+                    DATEARG,
+                    NUMRES,
+                    CHARRES,
+                    DATERES,
+                    HIDDEN)
+             VALUES('TABLEADMIN',
+                    0,
+                    'REFTABLE',
+                    DATE('0001-01-01'),
+                    0,
+                    'TABLE ADMINISTRATORS',
+                    DATE('0001-01-01'),
+                    'N');
+
+INSERT INTO STDXREF(REFTABLE,
+                    NUMARG,
+                    CHARARG,
+                    DATEARG,
+                    NUMRES,
+                    CHARRES,
+                    DATERES,
+                    HIDDEN)
+             VALUES('TABLEGUIDE',
+                    0,
+                    'REFTABLE',
+                    DATE('0001-01-01'),
+                    0,
+                    'TABLE GUIDE DESCRIPTIONS',
+                    DATE('0001-01-01'),
+                    'N');
+
+INSERT INTO STDXREF(REFTABLE,
+                    NUMARG,
+                    CHARARG,
+                    DATEARG,
+                    NUMRES,
+                    CHARRES,
+                    DATERES,
+                    HIDDEN)
+             SELECT 'TABLEGUIDE',
+                    ENTITYID,
+                    'CHARARG',
+                    DATE('0001-01-01'),
+                    0,
+                    'AUTHORIZED USER PROFILE',
+                    DATE('0001-01-01'),
+                    'N'
+             FROM STDXREF
+               WHERE REFTABLE = 'SUPERADMIN'
+                 AND CHARARG  = 'REFTABLE';
+
+INSERT INTO STDXREF(REFTABLE,
+                    NUMARG,
+                    CHARARG,
+                    DATEARG,
+                    NUMRES,
+                    CHARRES,
+                    DATERES,
+                    HIDDEN)
+             SELECT 'TABLEGUIDE',
+                    ENTITYID,
+                    'CHARARG',
+                    DATE('0001-01-01'),
+                    0,
+                    'REFERENCE TABLE NAME',
+                    DATE('0001-01-01'),
+                    'N'
+             FROM STDXREF
+               WHERE REFTABLE = 'TABLEADMIN'
+                 AND CHARARG  = 'REFTABLE';
+
+INSERT INTO STDXREF(REFTABLE,
+                    NUMARG,
+                    CHARARG,
+                    DATEARG,
+                    NUMRES,
+                    CHARRES,
+                    DATERES,
+                    HIDDEN)
+             SELECT 'TABLEGUIDE',
+                    ENTITYID,
+                    'CHARRES',
+                    DATE('0001-01-01'),
+                    0,
+                    'AUTHORIZED USER PROFILE',
+                    DATE('0001-01-01'),
+                    'N'
+             FROM STDXREF
+               WHERE REFTABLE = 'TABLEADMIN'
+                 AND CHARARG  = 'REFTABLE';
+

@@ -2,7 +2,7 @@
       *                                                                                            *
       *  STANDARD CROSS REFERENCE APPLICATION FUNCTIONS                                            *
       *                                                                                            *
-      *  Copyright (C) 2006, 2020  Christopher F. Burns Sr.                                        *
+      *  Copyright (C) 2006, 2021  Christopher F. Burns Sr.                                        *
       *                                                                                            *
       *  This program is free software: you can redistribute it and/or modify                      *
       *  it under the terms of the GNU General Public License as published by                      *
@@ -31,22 +31,22 @@
 
        dcl-proc XrefNum export;                                              // xref with num result
 
-       dcl-pi XrefNum like(StdXrefF.numres);                                 // xref with num result
-         RefTable like(StdXrefF.reftable) const;                             // reference table
-         NumArg   like(StdXrefF.numarg)   const;                             // numeric argument
-         CharArg  like(StdXrefF.chararg)  const;                             // character argument
-         DateArg  like(StdXrefF.datearg)  const;                             // date argument
+       dcl-pi XrefNum like(StdXrefF.NumRes);                                 // xref with num result
+         RefTable like(StdXrefF.RefTable) const;                             // reference table
+         NumArg   like(StdXrefF.NumArg)   const;                             // numeric argument
+         CharArg  like(StdXrefF.CharArg)  const;                             // character argument
+         DateArg  like(StdXrefF.DateArg)  const;                             // date argument
        end-pi;                                                               // xref with num result
 
-       dcl-s NumResX like(StdXrefF.numres);                                  // numeric result
+       dcl-s NumResX like(StdXrefF.NumRes);                                  // numeric result
 
        exec sql
-         select ifnull(numres, 0) into :NumResX from StdXref
-           where reftable = :RefTable
-             and numarg   = :Numarg
-             and chararg  = :CharArg
-             and datearg  = :DateArg
-             and chararg <> :Marker
+         select ifnull(NumRes, 0) into :NumResX from StdXref
+           where RefTable = :RefTable
+             and NumArg   = :Numarg
+             and CharArg  = :CharArg
+             and DateArg  = :DateArg
+             and CharArg <> :Marker
                order by entityID
                  fetch first row only;                                       // get matching entry
 
@@ -60,12 +60,12 @@
 
        dcl-proc XrefNumN export;                                             // xref with num result
 
-       dcl-pi XrefNumN like(StdXrefF.numres);                                // xref with num result
-         RefTable like(StdXrefF.reftable) const;                             // reference table
-         NumArg   like(StdXrefF.numarg)   const;                             // numeric argument
+       dcl-pi XrefNumN like(StdXrefF.NumRes);                                // xref with num result
+         RefTable like(StdXrefF.RefTable) const;                             // reference table
+         NumArg   like(StdXrefF.NumArg)   const;                             // numeric argument
        end-pi;                                                               // xref with num result
 
-       return XrefNum(RefTable : NumArg : *blanks : *loval);                 // assume no other args
+       return XrefNum(RefTable : NumArg : *blanks : LowDate);                // assume no other args
 
        end-proc;                                                             // xref with num result
 
@@ -75,12 +75,12 @@
 
        dcl-proc XrefNumC export;                                             // xref with num result
 
-       dcl-pi XrefNumC like(StdXrefF.numres);                                // xref with num result
-         RefTable like(StdXrefF.reftable) const;                             // reference table
-         CharArg  like(StdXrefF.chararg)  const;                             // character argument
+       dcl-pi XrefNumC like(StdXrefF.NumRes);                                // xref with num result
+         RefTable like(StdXrefF.RefTable) const;                             // reference table
+         CharArg  like(StdXrefF.CharArg)  const;                             // character argument
        end-pi;                                                               // xref with num result
 
-       return XrefNum(RefTable : 0 : CharArg : *loval);                      // assume no other args
+       return XrefNum(RefTable : 0 : CharArg : LowDate);                     // assume no other args
 
        end-proc;                                                             // xref with num result
 
@@ -90,9 +90,9 @@
 
        dcl-proc XrefNumD export;                                             // xref with num result
 
-       dcl-pi XrefNumD like(StdXrefF.numres);                                // xref with num result
-         RefTable like(StdXrefF.reftable) const;                             // reference table
-         DateArg  like(StdXrefF.datearg)  const;                             // date argument
+       dcl-pi XrefNumD like(StdXrefF.NumRes);                                // xref with num result
+         RefTable like(StdXrefF.RefTable) const;                             // reference table
+         DateArg  like(StdXrefF.DateArg)  const;                             // date argument
        end-pi;                                                               // xref with num result
 
        return XrefNum(RefTable : 0 : *blanks : DateArg);                     // assume no other args
@@ -106,13 +106,13 @@
 
        dcl-proc XrefNumNC export;                                            // xref with num result
 
-       dcl-pi XrefNumNC like(StdXrefF.numres);                               // xref with num result
-         RefTable like(StdXrefF.reftable) const;                             // reference table
-         NumArg   like(StdXrefF.numarg)   const;                             // numeric argument
-         CharArg  like(StdXrefF.chararg)  const;                             // character argument
+       dcl-pi XrefNumNC like(StdXrefF.NumRes);                               // xref with num result
+         RefTable like(StdXrefF.RefTable) const;                             // reference table
+         NumArg   like(StdXrefF.NumArg)   const;                             // numeric argument
+         CharArg  like(StdXrefF.CharArg)  const;                             // character argument
        end-pi;                                                               // xref with num result
 
-       return XrefNum(RefTable : NumArg : CharArg : *loval);                 // assume no date arg
+       return XrefNum(RefTable : NumArg : CharArg : LowDate);                // assume no date arg
 
        end-proc;                                                             // xref with num result
 
@@ -123,10 +123,10 @@
 
        dcl-proc XrefNumND export;                                            // xref with num result
 
-       dcl-pi XrefNumND like(StdXrefF.numres);                               // xref with num result
-         RefTable like(StdXrefF.reftable) const;                             // reference table
-         NumArg   like(StdXrefF.numarg)   const;                             // numeric argument
-         DateArg  like(StdXrefF.datearg)  const;                             // date argument
+       dcl-pi XrefNumND like(StdXrefF.NumRes);                               // xref with num result
+         RefTable like(StdXrefF.RefTable) const;                             // reference table
+         NumArg   like(StdXrefF.NumArg)   const;                             // numeric argument
+         DateArg  like(StdXrefF.DateArg)  const;                             // date argument
        end-pi;                                                               // xref with num result
 
        return XrefNum(RefTable : NumArg : *blank : DateArg);                 // assume no char arg
@@ -140,10 +140,10 @@
 
        dcl-proc XrefNumCD export;                                            // xref with num result
 
-       dcl-pi XrefNumCD like(StdXrefF.numres);                               // xref with num result
-         RefTable like(StdXrefF.reftable) const;                             // reference table
-         CharArg  like(StdXrefF.chararg)  const;                             // character argument
-         DateArg  like(StdXrefF.datearg)  const;                             // date argument
+       dcl-pi XrefNumCD like(StdXrefF.NumRes);                               // xref with num result
+         RefTable like(StdXrefF.RefTable) const;                             // reference table
+         CharArg  like(StdXrefF.CharArg)  const;                             // character argument
+         DateArg  like(StdXrefF.DateArg)  const;                             // date argument
        end-pi;                                                               // xref with num result
 
        return XrefNum(RefTable : 0 : CharArg : DateArg);                     // assume no num arg
@@ -156,22 +156,22 @@
 
        dcl-proc XrefChar export;                                             // xref with chr result
 
-       dcl-pi XrefChar like(StdXrefF.charres);                               // xref with chr result
-         RefTable like(StdXrefF.reftable) const;                             // reference table
-         NumArg   like(StdXrefF.numarg)   const;                             // numeric argument
-         CharArg  like(StdXrefF.chararg)  const;                             // character argument
-         DateArg  like(StdXrefF.datearg)  const;                             // date argument
+       dcl-pi XrefChar like(StdXrefF.CharRes);                               // xref with chr result
+         RefTable like(StdXrefF.RefTable) const;                             // reference table
+         NumArg   like(StdXrefF.NumArg)   const;                             // numeric argument
+         CharArg  like(StdXrefF.CharArg)  const;                             // character argument
+         DateArg  like(StdXrefF.DateArg)  const;                             // date argument
        end-pi;                                                               // xref with chr result
 
-       dcl-s CharResX like(StdXrefF.charres);                                // character result
+       dcl-s CharResX like(StdXrefF.CharRes);                                // character result
 
        exec sql
-         select ifnull(charres, ' ') into :CharResX from StdXref
-           where reftable = :RefTable
-             and numarg   = :NumArg
-             and chararg  = :CharArg
-             and datearg  = :DateArg
-             and chararg <> :Marker
+         select ifnull(CharRes, ' ') into :CharResX from StdXref
+           where RefTable = :RefTable
+             and NumArg   = :NumArg
+             and CharArg  = :CharArg
+             and DateArg  = :DateArg
+             and CharArg <> :Marker
                order by entityID
                  fetch first row only;                                       // get matching entry
 
@@ -185,12 +185,12 @@
 
        dcl-proc XrefCharN export;                                            // xref with chr result
 
-       dcl-pi XrefCharN like(StdXrefF.charres);                              // xref with chr result
-         RefTable like(StdXrefF.reftable) const;                             // reference table
-         NumArg   like(StdXrefF.numarg)   const;                             // numeric argument
+       dcl-pi XrefCharN like(StdXrefF.CharRes);                              // xref with chr result
+         RefTable like(StdXrefF.RefTable) const;                             // reference table
+         NumArg   like(StdXrefF.NumArg)   const;                             // numeric argument
        end-pi;                                                               // xref with chr result
 
-       return XrefChar(RefTable : NumArg : *blanks : *loval);                // assume no other args
+       return XrefChar(RefTable : NumArg : *blanks : LowDate);               // assume no other args
 
        end-proc;                                                             // xref with chr result
 
@@ -200,12 +200,12 @@
 
        dcl-proc XrefCharC export;                                            // xref with chr result
 
-       dcl-pi XrefCharC like(StdXrefF.charres);                              // xref with chr result
-         RefTable like(StdXrefF.reftable) const;                             // reference table
-         CharArg  like(StdXrefF.chararg)  const;                             // character argument
+       dcl-pi XrefCharC like(StdXrefF.CharRes);                              // xref with chr result
+         RefTable like(StdXrefF.RefTable) const;                             // reference table
+         CharArg  like(StdXrefF.CharArg)  const;                             // character argument
        end-pi;                                                               // xref with chr result
 
-       return XrefChar(RefTable : 0 : CharArg : *loval);                     // assume no other args
+       return XrefChar(RefTable : 0 : CharArg : LowDate);                    // assume no other args
 
        end-proc;                                                             // xref with chr result
 
@@ -215,9 +215,9 @@
 
        dcl-proc XrefCharD export;                                            // xref with chr result
 
-       dcl-pi XrefCharD like(StdXrefF.charres);                              // xref with chr result
-         RefTable like(StdXrefF.reftable) const;                             // reference table
-         DateArg  like(StdXrefF.datearg)  const;                             // date argument
+       dcl-pi XrefCharD like(StdXrefF.CharRes);                              // xref with chr result
+         RefTable like(StdXrefF.RefTable) const;                             // reference table
+         DateArg  like(StdXrefF.DateArg)  const;                             // date argument
        end-pi;                                                               // xref with chr result
 
        return XrefChar(RefTable : 0 : *blanks : DateArg);                    // assume no other args
@@ -231,13 +231,13 @@
 
        dcl-proc XrefCharNC export;                                           // xref with chr result
 
-       dcl-pi XrefCharNC like(StdXrefF.charres);                             // xref with chr result
-         RefTable like(StdXrefF.reftable) const;                             // reference table
-         NumArg   like(StdXrefF.numarg)   const;                             // numeric argument
-         CharArg  like(StdXrefF.chararg)  const;                             // character argument
+       dcl-pi XrefCharNC like(StdXrefF.CharRes);                             // xref with chr result
+         RefTable like(StdXrefF.RefTable) const;                             // reference table
+         NumArg   like(StdXrefF.NumArg)   const;                             // numeric argument
+         CharArg  like(StdXrefF.CharArg)  const;                             // character argument
        end-pi;                                                               // xref with chr result
 
-       return XrefChar(RefTable : NumArg : CharArg : *loval);                // assume no date arg
+       return XrefChar(RefTable : NumArg : CharArg : LowDate);               // assume no date arg
 
        end-proc;                                                             // xref with chr result
 
@@ -248,10 +248,10 @@
 
        dcl-proc XrefCharND export;                                           // xref with chr result
 
-       dcl-pi XrefCharND like(StdXrefF.charres);                             // xref with chr result
-         RefTable like(StdXrefF.reftable) const;                             // reference table
-         NumArg   like(StdXrefF.numarg)   const;                             // numeric argument
-         DateArg  like(StdXrefF.datearg)  const;                             // date argument
+       dcl-pi XrefCharND like(StdXrefF.CharRes);                             // xref with chr result
+         RefTable like(StdXrefF.RefTable) const;                             // reference table
+         NumArg   like(StdXrefF.NumArg)   const;                             // numeric argument
+         DateArg  like(StdXrefF.DateArg)  const;                             // date argument
        end-pi;                                                               // xref with chr result
 
        return XrefChar(RefTable : NumArg : *blank : DateArg);                // assume no char arg
@@ -265,10 +265,10 @@
 
        dcl-proc XrefCharCD export;                                           // xref with chr result
 
-       dcl-pi XrefCharCD like(StdXrefF.charres);                             // xref with chr result
-         RefTable like(StdXrefF.reftable) const;                             // reference table
-         CharArg  like(StdXrefF.chararg)  const;                             // character argument
-         DateArg  like(StdXrefF.datearg)  const;                             // date argument
+       dcl-pi XrefCharCD like(StdXrefF.CharRes);                             // xref with chr result
+         RefTable like(StdXrefF.RefTable) const;                             // reference table
+         CharArg  like(StdXrefF.CharArg)  const;                             // character argument
+         DateArg  like(StdXrefF.DateArg)  const;                             // date argument
        end-pi;                                                               // xref with chr result
 
        return XrefChar(RefTable : 0 : CharArg : DateArg);                    // assume no num arg
@@ -281,22 +281,22 @@
 
        dcl-proc XrefDate export;                                             // xref with dat result
 
-       dcl-pi XrefDate like(StdXrefF.dateres);                               // xref with dat result
-         RefTable like(StdXrefF.reftable) const;                             // reference table
-         NumArg   like(StdXrefF.numarg)   const;                             // numeric argument
-         CharArg  like(StdXrefF.chararg)  const;                             // character argument
-         DateArg  like(StdXrefF.datearg)  const;                             // date argument
+       dcl-pi XrefDate like(StdXrefF.DateRes);                               // xref with dat result
+         RefTable like(StdXrefF.RefTable) const;                             // reference table
+         NumArg   like(StdXrefF.NumArg)   const;                             // numeric argument
+         CharArg  like(StdXrefF.CharArg)  const;                             // character argument
+         DateArg  like(StdXrefF.DateArg)  const;                             // date argument
        end-pi;                                                               // xref with dat result
 
-       dcl-s DateResX like(StdXrefF.dateres);                                // date result
+       dcl-s DateResX like(StdXrefF.DateRes);                                // date result
 
        exec sql
-         select ifnull(dateres, date('0001-01-01')) into :DateResX from StdXref
-           where reftable = :RefTable
-             and numarg   = :NumArg
-             and chararg  = :CharArg
-             and datearg  = :DateArg
-             and chararg <> :Marker
+         select ifnull(DateRes, :LowDate) into :DateResX from StdXref
+           where RefTable = :RefTable
+             and NumArg   = :NumArg
+             and CharArg  = :CharArg
+             and DateArg  = :DateArg
+             and CharArg <> :Marker
                order by entityID
                  fetch first row only;                                       // get matching entry
 
@@ -310,12 +310,12 @@
 
        dcl-proc XrefDateN export;                                            // xref with dat result
 
-       dcl-pi XrefDateN like(StdXrefF.dateres);                              // xref with dat result
-         RefTable like(StdXrefF.reftable) const;                             // reference table
-         NumArg   like(StdXrefF.numarg)   const;                             // numeric argument
+       dcl-pi XrefDateN like(StdXrefF.DateRes);                              // xref with dat result
+         RefTable like(StdXrefF.RefTable) const;                             // reference table
+         NumArg   like(StdXrefF.NumArg)   const;                             // numeric argument
        end-pi;                                                               // xref with dat result
 
-       return XrefDate(RefTable : NumArg : *blanks : *loval);                // assume no other args
+       return XrefDate(RefTable : NumArg : *blanks : LowDate);               // assume no other args
 
        end-proc;                                                             // xref with dat result
 
@@ -325,12 +325,12 @@
 
        dcl-proc XrefDateC export;                                            // xref with dat result
 
-       dcl-pi XrefDateC like(StdXrefF.dateres);                              // xref with dat result
-         RefTable like(StdXrefF.reftable) const;                             // reference table
-         CharArg  like(StdXrefF.chararg)  const;                             // character argument
+       dcl-pi XrefDateC like(StdXrefF.DateRes);                              // xref with dat result
+         RefTable like(StdXrefF.RefTable) const;                             // reference table
+         CharArg  like(StdXrefF.CharArg)  const;                             // character argument
        end-pi;                                                               // xref with dat result
 
-       return XrefDate(RefTable : 0 : CharArg : *loval);                     // assume no other args
+       return XrefDate(RefTable : 0 : CharArg : LowDate);                    // assume no other args
 
        end-proc;                                                             // xref with dat result
 
@@ -340,9 +340,9 @@
 
        dcl-proc XrefDateD export;                                            // xref with dat result
 
-       dcl-pi XrefDateD like(StdXrefF.dateres);                              // xref with dat result
-         RefTable like(StdXrefF.reftable) const;                             // reference table
-         DateArg  like(StdXrefF.datearg)  const;                             // date argument
+       dcl-pi XrefDateD like(StdXrefF.DateRes);                              // xref with dat result
+         RefTable like(StdXrefF.RefTable) const;                             // reference table
+         DateArg  like(StdXrefF.DateArg)  const;                             // date argument
        end-pi;                                                               // xref with dat result
 
        return XrefDate(RefTable : 0 : *blanks : DateArg);                    // assume no other args
@@ -356,13 +356,13 @@
 
        dcl-proc XrefDateNC export;                                           // xref with dat result
 
-       dcl-pi XrefDateNC like(StdXrefF.dateres);                             // xref with dat result
-         RefTable like(StdXrefF.reftable) const;                             // reference table
-         NumArg   like(StdXrefF.numarg)   const;                             // numeric argument
-         CharArg  like(StdXrefF.chararg)  const;                             // character argument
+       dcl-pi XrefDateNC like(StdXrefF.DateRes);                             // xref with dat result
+         RefTable like(StdXrefF.RefTable) const;                             // reference table
+         NumArg   like(StdXrefF.NumArg)   const;                             // numeric argument
+         CharArg  like(StdXrefF.CharArg)  const;                             // character argument
        end-pi;                                                               // xref with dat result
 
-       return XrefDate(RefTable : NumArg : CharArg : *loval);                // assume no date arg
+       return XrefDate(RefTable : NumArg : CharArg : LowDate);               // assume no date arg
 
        end-proc;                                                             // xref with dat result
 
@@ -373,10 +373,10 @@
 
        dcl-proc XrefDateND export;                                           // xref with dat result
 
-       dcl-pi XrefDateND like(StdXrefF.dateres);                             // xref with dat result
-         RefTable like(StdXrefF.reftable) const;                             // reference table
-         NumArg   like(StdXrefF.numarg)   const;                             // numeric argument
-         DateArg  like(StdXrefF.datearg)  const;                             // date argument
+       dcl-pi XrefDateND like(StdXrefF.DateRes);                             // xref with dat result
+         RefTable like(StdXrefF.RefTable) const;                             // reference table
+         NumArg   like(StdXrefF.NumArg)   const;                             // numeric argument
+         DateArg  like(StdXrefF.DateArg)  const;                             // date argument
        end-pi;                                                               // xref with dat result
 
        return XrefDate(RefTable : NumArg : *blank : DateArg);                // assume no char arg
@@ -390,10 +390,10 @@
 
        dcl-proc XrefDateCD export;                                           // xref with dat result
 
-       dcl-pi XrefDateCD like(StdXrefF.dateres);                             // xref with dat result
-         RefTable like(StdXrefF.reftable) const;                             // reference table
-         CharArg  like(StdXrefF.chararg)  const;                             // character argument
-         DateArg  like(StdXrefF.datearg)  const;                             // date argument
+       dcl-pi XrefDateCD like(StdXrefF.DateRes);                             // xref with dat result
+         RefTable like(StdXrefF.RefTable) const;                             // reference table
+         CharArg  like(StdXrefF.CharArg)  const;                             // character argument
+         DateArg  like(StdXrefF.DateArg)  const;                             // date argument
        end-pi;                                                               // xref with dat result
 
        return XrefDate(RefTable : 0 : CharArg : DateArg);                    // assume no num arg
@@ -410,12 +410,12 @@
 
        dcl-f StdXrefL1 keyed usage(*update) rename(StdXref:StdXrefR);        // standard cross ref
 
-       dcl-pi IncrXrefNum like(StdXrefF.numres);                             // increment xref num
-         RefTable like(StdXrefF.reftable) const;                             // reference table
-         NumArg   like(StdXrefF.numarg)   const;                             // numeric argument
-         CharArg  like(StdXrefF.chararg)  const;                             // character argument
-         DateArg  like(StdXrefF.datearg)  const;                             // date argument
-         IncrVal  like(StdXrefF.numres)   const;                             // increment value
+       dcl-pi IncrXrefNum like(StdXrefF.NumRes);                             // increment xref num
+         RefTable like(StdXrefF.RefTable) const;                             // reference table
+         NumArg   like(StdXrefF.NumArg)   const;                             // numeric argument
+         CharArg  like(StdXrefF.CharArg)  const;                             // character argument
+         DateArg  like(StdXrefF.DateArg)  const;                             // date argument
+         IncrVal  like(StdXrefF.NumRes)   const;                             // increment value
        end-pi;                                                               // increment xref num
 
        dcl-ds StdXrefX likerec(StdXrefR:*all) inz;                           // std cross ref recd
@@ -427,9 +427,9 @@
        endmon;                                                               // catch I/O errors
 
        if %found(StdXrefL1);                                                 // if match entry found
-         StdXrefX.numres += IncrVal;                                         // increment num result
+         StdXrefX.NumRes += IncrVal;                                         // increment num result
          update StdXrefR StdXrefX;                                           // update xref entry
-         return StdXrefX.numres;                                             // return new result
+         return StdXrefX.NumRes;                                             // return new result
        else;                                                                 // no match entry found
          return 0;                                                           // return zero value
        endif;                                                                // if match entry found
@@ -446,12 +446,12 @@
 
        dcl-f StdXrefL1 keyed usage(*update) rename(StdXref:StdXrefR);        // standard cross ref
 
-       dcl-pi IncrXrefDate like(StdXrefF.dateres);                           // increment xref date
-         RefTable like(StdXrefF.reftable) const;                             // reference table
-         NumArg   like(StdXrefF.numarg)   const;                             // numeric argument
-         CharArg  like(StdXrefF.chararg)  const;                             // character argument
-         DateArg  like(StdXrefF.datearg)  const;                             // date argument
-         IncrDays like(StdXrefF.numarg)   const;                             // increment num days
+       dcl-pi IncrXrefDate like(StdXrefF.DateRes);                           // increment xref date
+         RefTable like(StdXrefF.RefTable) const;                             // reference table
+         NumArg   like(StdXrefF.NumArg)   const;                             // numeric argument
+         CharArg  like(StdXrefF.CharArg)  const;                             // character argument
+         DateArg  like(StdXrefF.DateArg)  const;                             // date argument
+         IncrDays like(StdXrefF.NumArg)   const;                             // increment num days
        end-pi;                                                               // increment xref date
 
        dcl-ds StdXrefX likerec(StdXrefR:*all) inz;                           // std cross ref recd
@@ -459,7 +459,7 @@
        monitor;                                                              // catch I/O errors
          chain (RefTable : NumArg : CharArg : DateArg) StdXrefR StdXrefX;    // get matching entry
        on-error *all;                                                        // on any error
-         return *loval;                                                      // return low date
+         return LowDate;                                                     // return low date
        endmon;                                                               // catch I/O errors
 
        if %found(StdXrefL1);                                                 // if match entry found
@@ -467,7 +467,7 @@
          update StdXrefR StdXrefX;                                           // update xref entry
          return StdXrefX.DateRes;                                            // return new result
        else;                                                                 // no match entry found
-         return *loval;                                                      // return low date
+         return LowDate;                                                     // return low date
        endif;                                                                // if match entry found
 
        end-proc;                                                             // increment xref date
@@ -479,18 +479,18 @@
 
        dcl-proc XrefNStepN export;                                           // step with num result
 
-       dcl-pi XrefNStepN like(StdXrefF.numres);                              // step with num result
-         RefTable like(StdXrefF.reftable) const;                             // reference table
-         NumArg   like(StdXrefF.numarg)   const;                             // numeric argument
+       dcl-pi XrefNStepN like(StdXrefF.NumRes);                              // step with num result
+         RefTable like(StdXrefF.RefTable) const;                             // reference table
+         NumArg   like(StdXrefF.NumArg)   const;                             // numeric argument
        end-pi;                                                               // step with num result
 
-       dcl-s NumArgX like(StdXrefF.numarg);                                  // numeric argument
+       dcl-s NumArgX like(StdXrefF.NumArg);                                  // numeric argument
 
        exec sql
-         select max(numarg) into :NumArgX from StdXref
-           where reftable  = :RefTable
-             and numarg   <= :Numarg
-             and chararg  <> :Marker;                                        // highest step reached
+         select ifnull(max(NumArg), 0) into :NumArgX from StdXref
+           where RefTable  = :RefTable
+             and NumArg   <= :Numarg
+             and CharArg  <> :Marker;                                        // highest step reached
 
        return XrefNumN(RefTable : NumArgX);                                  // retn numeric result
 
@@ -503,18 +503,18 @@
 
        dcl-proc XrefCStepN export;                                           // step with chr result
 
-       dcl-pi XrefCStepN like(StdXrefF.charres);                             // step with chr result
-         RefTable like(StdXrefF.reftable) const;                             // reference table
-         NumArg   like(StdXrefF.numarg)   const;                             // numeric argument
+       dcl-pi XrefCStepN like(StdXrefF.CharRes);                             // step with chr result
+         RefTable like(StdXrefF.RefTable) const;                             // reference table
+         NumArg   like(StdXrefF.NumArg)   const;                             // numeric argument
        end-pi;                                                               // step with chr result
 
-       dcl-s NumArgX like(StdXrefF.numarg);                                  // numeric argument
+       dcl-s NumArgX like(StdXrefF.NumArg);                                  // numeric argument
 
        exec sql
-         select max(numarg) into :NumArgX from StdXref
-           where reftable  = :RefTable
-             and numarg   <= :Numarg
-             and chararg  <> :Marker;                                        // highest step reached
+         select ifnull(max(NumArg), 0) into :NumArgX from StdXref
+           where RefTable  = :RefTable
+             and NumArg   <= :Numarg
+             and CharArg  <> :Marker;                                        // highest step reached
 
        return XrefCharN(RefTable : NumArgX);                                 // retn char result
 
@@ -527,18 +527,18 @@
 
        dcl-proc XrefDStepN export;                                           // step with chr result
 
-       dcl-pi XrefDStepN like(StdXrefF.dateres);                             // step with dat result
-         RefTable like(StdXrefF.reftable) const;                             // reference table
-         NumArg   like(StdXrefF.numarg)   const;                             // numeric argument
+       dcl-pi XrefDStepN like(StdXrefF.DateRes);                             // step with dat result
+         RefTable like(StdXrefF.RefTable) const;                             // reference table
+         NumArg   like(StdXrefF.NumArg)   const;                             // numeric argument
        end-pi;                                                               // step with dat result
 
-       dcl-s NumArgX like(StdXrefF.numarg);                                  // numeric argument
+       dcl-s NumArgX like(StdXrefF.NumArg);                                  // numeric argument
 
        exec sql
-         select max(numarg) into :NumArgX from StdXref
-           where reftable  = :RefTable
-             and numarg   <= :Numarg
-             and chararg  <> :Marker;                                        // highest step reached
+         select ifnull(max(NumArg), 0) into :NumArgX from StdXref
+           where RefTable  = :RefTable
+             and NumArg   <= :Numarg
+             and CharArg  <> :Marker;                                        // highest step reached
 
        return XrefDateN(RefTable : NumArgX);                                 // retn date result
 
@@ -551,18 +551,18 @@
 
        dcl-proc XrefNStepC export;                                           // step with num result
 
-       dcl-pi XrefNStepC like(StdXrefF.numres);                              // step with num result
-         RefTable like(StdXrefF.reftable) const;                             // reference table
-         CharArg  like(StdXrefF.chararg)  const;                             // character argument
+       dcl-pi XrefNStepC like(StdXrefF.NumRes);                              // step with num result
+         RefTable like(StdXrefF.RefTable) const;                             // reference table
+         CharArg  like(StdXrefF.CharArg)  const;                             // character argument
        end-pi;                                                               // step with num result
 
-       dcl-s CharArgX like(StdXrefF.chararg);                                // character argument
+       dcl-s CharArgX like(StdXrefF.CharArg);                                // character argument
 
        exec sql
-         select max(chararg) into :CharArgX from StdXref
-           where reftable  = :RefTable
-             and chararg  <= :CharArg
-             and chararg  <> :Marker;                                        // highest step reached
+         select ifnull(max(CharArg), ' ') into :CharArgX from StdXref
+           where RefTable  = :RefTable
+             and CharArg  <= :CharArg
+             and CharArg  <> :Marker;                                        // highest step reached
 
        return XrefNumC(RefTable : CharArgX);                                 // retn numeric result
 
@@ -575,18 +575,18 @@
 
        dcl-proc XrefCStepC export;                                           // step with chr result
 
-       dcl-pi XrefCStepC like(StdXrefF.charres);                             // step with chr result
-         RefTable like(StdXrefF.reftable) const;                             // reference table
-         CharArg  like(StdXrefF.chararg)  const;                             // character argument
+       dcl-pi XrefCStepC like(StdXrefF.CharRes);                             // step with chr result
+         RefTable like(StdXrefF.RefTable) const;                             // reference table
+         CharArg  like(StdXrefF.CharArg)  const;                             // character argument
        end-pi;                                                               // step with chr result
 
-       dcl-s CharArgX like(StdXrefF.chararg);                                // character argument
+       dcl-s CharArgX like(StdXrefF.CharArg);                                // character argument
 
        exec sql
-         select max(chararg) into :CharArgX from StdXref
-           where reftable  = :RefTable
-             and chararg  <= :CharArg
-             and chararg  <> :Marker;                                        // highest step reached
+         select ifnull(max(CharArg), ' ') into :CharArgX from StdXref
+           where RefTable  = :RefTable
+             and CharArg  <= :CharArg
+             and CharArg  <> :Marker;                                        // highest step reached
 
        return XrefCharC(RefTable : CharArgX);                                // retn char result
 
@@ -599,18 +599,18 @@
 
        dcl-proc XrefDStepC export;                                           // step with dat result
 
-       dcl-pi XrefDStepC like(StdXrefF.dateres);                             // step with dat result
-         RefTable like(StdXrefF.reftable) const;                             // reference table
-         CharArg  like(StdXrefF.chararg)  const;                             // character argument
+       dcl-pi XrefDStepC like(StdXrefF.DateRes);                             // step with dat result
+         RefTable like(StdXrefF.RefTable) const;                             // reference table
+         CharArg  like(StdXrefF.CharArg)  const;                             // character argument
        end-pi;                                                               // step with dat result
 
-       dcl-s CharArgX like(StdXrefF.chararg);                                // character argument
+       dcl-s CharArgX like(StdXrefF.CharArg);                                // character argument
 
        exec sql
-         select max(chararg) into :CharArgX from StdXref
-           where reftable  = :RefTable
-             and chararg  <= :CharArg
-             and chararg  <> :Marker;                                        // highest step reached
+         select ifnull(max(CharArg), ' ') into :CharArgX from StdXref
+           where RefTable  = :RefTable
+             and CharArg  <= :CharArg
+             and CharArg  <> :Marker;                                        // highest step reached
 
        return XrefDateC(RefTable : CharArgX);                                // retn date result
 
@@ -623,18 +623,18 @@
 
        dcl-proc XrefNStepD export;                                           // step with num result
 
-       dcl-pi XrefNStepD like(StdXrefF.numres);                              // step with num result
-         RefTable like(StdXrefF.reftable) const;                             // reference table
-         DateArg  like(StdXrefF.datearg)  const;                             // date argument
+       dcl-pi XrefNStepD like(StdXrefF.NumRes);                              // step with num result
+         RefTable like(StdXrefF.RefTable) const;                             // reference table
+         DateArg  like(StdXrefF.DateArg)  const;                             // date argument
        end-pi;                                                               // step with num result
 
-       dcl-s DateArgX like(StdXrefF.datearg);                                // date argument
+       dcl-s DateArgX like(StdXrefF.DateArg);                                // date argument
 
        exec sql
-         select max(datearg) into :DateArgX from StdXref
-           where reftable  = :RefTable
-             and datearg  <= :DateArg
-             and chararg  <> :Marker;                                        // highest step reached
+         select ifnull(max(DateArg), :LowDate) into :DateArgX from StdXref
+           where RefTable  = :RefTable
+             and DateArg  <= :DateArg
+             and CharArg  <> :Marker;                                        // highest step reached
 
        return XrefNumD(RefTable : DateArgX);                                 // retn numeric result
 
@@ -647,18 +647,18 @@
 
        dcl-proc XrefCStepD export;                                           // step with chr result
 
-       dcl-pi XrefCStepD like(StdXrefF.charres);                             // step with chr result
-         RefTable like(StdXrefF.reftable) const;                             // reference table
-         DateArg  like(StdXrefF.datearg)  const;                             // date argument
+       dcl-pi XrefCStepD like(StdXrefF.CharRes);                             // step with chr result
+         RefTable like(StdXrefF.RefTable) const;                             // reference table
+         DateArg  like(StdXrefF.DateArg)  const;                             // date argument
        end-pi;                                                               // step with chr result
 
-       dcl-s DateArgX like(StdXrefF.datearg);                                // date argument
+       dcl-s DateArgX like(StdXrefF.DateArg);                                // date argument
 
        exec sql
-         select max(datearg) into :DateArgX from StdXref
-           where reftable  = :RefTable
-             and datearg  <= :DateArg
-             and chararg  <> :Marker;                                        // highest step reached
+         select ifnull(max(DateArg), :LowDate) into :DateArgX from StdXref
+           where RefTable  = :RefTable
+             and DateArg  <= :DateArg
+             and CharArg  <> :Marker;                                        // highest step reached
 
        return XrefCharD(RefTable : DateArgX);                                // retn char result
 
@@ -671,18 +671,18 @@
 
        dcl-proc XrefDStepD export;                                           // step with dat result
 
-       dcl-pi XrefDStepD like(StdXrefF.dateres);                             // step with dat result
-         RefTable like(StdXrefF.reftable) const;                             // reference table
-         DateArg  like(StdXrefF.datearg)  const;                             // date argument
+       dcl-pi XrefDStepD like(StdXrefF.DateRes);                             // step with dat result
+         RefTable like(StdXrefF.RefTable) const;                             // reference table
+         DateArg  like(StdXrefF.DateArg)  const;                             // date argument
        end-pi;                                                               // step with dat result
 
-       dcl-s DateArgX like(StdXrefF.datearg);                                // date argument
+       dcl-s DateArgX like(StdXrefF.DateArg);                                // date argument
 
        exec sql
-         select max(datearg) into :DateArgX from StdXref
-           where reftable  = :RefTable
-             and datearg  <= :DateArg
-             and chararg  <> :Marker;                                        // highest step reached
+         select ifnull(max(DateArg), :LowDate) into :DateArgX from StdXref
+           where RefTable  = :RefTable
+             and DateArg  <= :DateArg
+             and CharArg  <> :Marker;                                        // highest step reached
 
        return XrefDateD(RefTable : DateArgX);                                // retn date result
 
