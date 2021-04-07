@@ -19,7 +19,8 @@
      A*
      A**************************************************************************
      A*
-     A                                      DSPSIZ(24 80 *DS3)
+     A                                      DSPSIZ(27 132 *DS4                 -
+     A                                             24 80 *DS3)
      A*
      A*  SEARCH FOR A CHARACTER ARGUMENT
      A*

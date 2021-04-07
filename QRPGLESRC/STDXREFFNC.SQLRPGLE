@@ -35,17 +35,22 @@
          RefTable like(StdXrefF.RefTable) const;                             // reference table
          NumArg   like(StdXrefF.NumArg)   const;                             // numeric argument
          CharArg  like(StdXrefF.CharArg)  const;                             // character argument
-         DateArg  like(StdXrefF.DateArg)  const;                             // date argument
+         DateArg  like(StdXrefF.DateArg)  const options(*nopass);            // date argument
        end-pi;                                                               // xref with num result
 
        dcl-s NumResX like(StdXrefF.NumRes);                                  // numeric result
+       dcl-s DateArgX like(StdXrefF.DateArg);                                // date argument
+
+       if %parms >= 4;                                                       // if date arg passed
+         DateArgX = DateArg;                                                 // use its value
+       endif;                                                                // if date arg passed
 
        exec sql
          select ifnull(NumRes, 0) into :NumResX from StdXref
            where RefTable = :RefTable
              and NumArg   = :Numarg
              and CharArg  = :CharArg
-             and DateArg  = :DateArg
+             and DateArg  = :DateArgX
              and CharArg <> :Marker
                order by entityID
                  fetch first row only;                                       // get matching entry
@@ -160,17 +165,22 @@
          RefTable like(StdXrefF.RefTable) const;                             // reference table
          NumArg   like(StdXrefF.NumArg)   const;                             // numeric argument
          CharArg  like(StdXrefF.CharArg)  const;                             // character argument
-         DateArg  like(StdXrefF.DateArg)  const;                             // date argument
+         DateArg  like(StdXrefF.DateArg)  const options(*nopass);            // date argument
        end-pi;                                                               // xref with chr result
 
        dcl-s CharResX like(StdXrefF.CharRes);                                // character result
+       dcl-s DateArgX like(StdXrefF.DateArg);                                // date argument
+
+       if %parms >= 4;                                                       // if date arg passed
+         DateArgX = DateArg;                                                 // use its value
+       endif;                                                                // if date arg passed
 
        exec sql
          select ifnull(CharRes, ' ') into :CharResX from StdXref
            where RefTable = :RefTable
              and NumArg   = :NumArg
              and CharArg  = :CharArg
-             and DateArg  = :DateArg
+             and DateArg  = :DateArgX
              and CharArg <> :Marker
                order by entityID
                  fetch first row only;                                       // get matching entry

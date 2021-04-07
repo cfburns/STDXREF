@@ -42,5 +42,7 @@
              EXPORT     SYMBOL(ISTABLEADMIN)
              EXPORT     SYMBOL(GETTABLEID)
              EXPORT     SYMBOL(NUMBEROFENTRIES)
+             EXPORT     SYMBOL(ISNUMERICARG)
+             EXPORT     SYMBOL(ISDATEARG)
              ENDPGMEXP
 

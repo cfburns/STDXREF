@@ -39,7 +39,7 @@
          RefTable like(StdXrefI.RefTable) const;                             // reference table
          NumArg   like(StdXrefI.NumArg)   const;                             // numeric argument
          CharArg  like(StdXrefI.CharArg)  const;                             // character argument
-         DateArg  like(StdXrefI.DateArg)  const;                             // date argument
+         DateArg  like(StdXrefI.DateArg)  const options(*nopass);            // date argument
        end-pr;                                                               // valid xref entry
 
        dcl-pr ValidXrefN ind;                                                // valid xref entry
@@ -139,6 +139,14 @@
        dcl-pr NumberOfEntries int(5);                                        // number of entries
          RefTable like(StdXrefI.RefTable) const;                             // reference table
        end-pr;                                                               // number of entries
+
+       dcl-pr isNumericArg ind;                                              // xref is numeric arg
+         RefTable like(StdXrefI.RefTable) const;                             // reference table
+       end-pr;                                                               // xref is numeric arg
+
+       dcl-pr isDateArg ind;                                                 // xref is date arg
+         RefTable like(StdXrefI.RefTable) const;                             // reference table
+       end-pr;                                                               // xref is date arg
 
        dcl-s Marker     like(StdXrefI.CharArg)  inz('REFTABLE');             // table header marker
        dcl-s SuperAdmin like(StdXrefI.RefTable) inz('SUPERADMIN');           // super admin table

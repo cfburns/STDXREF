@@ -25,7 +25,7 @@
          RefTable like(StdXrefF.RefTable) const;                             // reference table
          NumArg   like(StdXrefF.NumArg)   const;                             // numeric argument
          CharArg  like(StdXrefF.CharArg)  const;                             // character argument
-         DateArg  like(StdXrefF.DateArg)  const;                             // date argument
+         DateArg  like(StdXrefF.DateArg)  const options(*nopass);            // date argument
        end-pr;                                                               // xref with num result
 
        dcl-pr XrefNumN like(StdXrefF.NumRes);                                // xref with num result
@@ -65,7 +65,7 @@
          RefTable like(StdXrefF.RefTable) const;                             // reference table
          NumArg   like(StdXrefF.NumArg)   const;                             // numeric argument
          CharArg  like(StdXrefF.CharArg)  const;                             // character argument
-         DateArg  like(StdXrefF.DateArg)  const;                             // date argument
+         DateArg  like(StdXrefF.DateArg)  const options(*nopass);            // date argument
        end-pr;                                                               // xref with chr result
 
        dcl-pr XrefCharN like(StdXrefF.CharRes);                              // xref with chr result

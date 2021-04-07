@@ -300,16 +300,21 @@
          RefTable like(StdXrefI.RefTable) const;                             // reference table
          NumArg   like(StdXrefI.NumArg)   const;                             // numeric argument
          CharArg  like(StdXrefI.CharArg)  const;                             // character argument
-         DateArg  like(StdXrefI.DateArg)  const;                             // date argument
+         DateArg  like(StdXrefI.DateArg)  const options(*nopass);            // date argument
        end-pi;                                                               // valid xref entry
 
        dcl-s ValidXrefX packed(1);                                           // valid xref found
+       dcl-s DateArgX   like(StdXrefI.DateArg);                              // date argument
+
+       if %parms >= 4;                                                       // if date arg passed
+         DateArgX = DateArg;                                                 // use its value
+       endif;                                                                // if date arg passed
 
        exec sql select 1 into :ValidXrefX from StdXref
          where RefTable = :RefTable
            and NumArg   = :NumArg
            and CharArg  = :CharArg
-           and DateArg  = :DateArg
+           and DateArg  = :DateArgX
            and CharArg <> :Marker;
 
        return (ValidXrefX > 0);                                              // true if match found
