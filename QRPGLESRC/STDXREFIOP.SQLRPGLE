@@ -994,7 +994,7 @@
          return *on;                                                         // anyone can maintain
        endif;                                                                // if table not secured
 
-       if %parms >= 1;                                                       // if profile passed
+       if %parms >= 2;                                                       // if profile passed
          UserProfileX = UserProfile;                                         // use it
        else;                                                                 // no profile passed
          UserProfileX = pgmsts.curusr;                                       // use current profile

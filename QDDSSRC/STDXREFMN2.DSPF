@@ -196,7 +196,6 @@
      A N45                                  DSPATR(ND)
      A            S2NUMRESX     20A  O  8 28
      A            S2CHARARGX    15A  O  9  5
-     A N44                                  DSPATR(ND)
      A                                  9 21'<CHAR>'
      A                                      COLOR(BLU)
      A N45                                  DSPATR(ND)
